@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 
 import './App.css';
 
+import Nav from './Nav'
 
 //companies
 import Companies from './Companies';
@@ -14,11 +15,10 @@ import CompanyEdit from './CompanyEdit';
 export default class App extends Component {
     render() {
         return (
-            <div className = "flex intro" >                
-               <Link to = "/companies" className = "big-text">Companies</Link>
-               <Link to ="/employees" className = "big-text">Employees</Link>
-            </div>
-        );
+          <React.Fragment>  
+            <Nav />
+            <h1 className = "mx-auto w-25 mt-5">Welcome to react </h1>
+          </React.Fragment>);
     }
 }
 

@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-class Company extends Component {
+import axios from 'axios';
 
+class Company extends Component {
+    constructor(props) {
+        super(props);
+        this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    }
+
+    handleDeleteClick(){
+        let deleteUrl = `api/companies/${this.props.id}/delete`;
+        this.props.del(deleteUrl);
+    }
     render() {
         let editUrl = `/companies/${this.props.id}/edit`;
+        
      return (  
         <React.Fragment>
-            <div className = "company-name-wrap">
-                <span className = "company-name"> {this.props.name} </span>
-                <Link to = {editUrl}  className = "crud-btn">edit</Link>
-                <span className = "crud-btn">delete</span>
+            <div className = "mt-2">
+                <span className = "btn btn-primary"> {this.props.name} </span>
+                <Link to = {editUrl}  className = " ml-5 btn btn-warning">edit</Link>
+                <span onClick = {this.handleDeleteClick} className = "btn btn-danger">delete</span>
             </div>
         </React.Fragment>
      );

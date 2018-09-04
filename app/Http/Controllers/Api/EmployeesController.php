@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CompaniesCollection;
-use App\Companies;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-
-
-class CompaniesController extends Controller
+use App\Emloyees;
+class EmployeesController extends Controller
 {
     public function index() 
     {
-        return new CompaniesCollection(Employees::all());
+        return new CompaniesCollection(Companies::all());
     }
 
     public function create(Request $request) 
@@ -22,10 +17,10 @@ class CompaniesController extends Controller
         $result = $request->all();
 
         $model = new Companies();
-        $company = $request->all();
-        $model->name = $company['name'];
-        $model->email = $company['email'];
-        $model->website = $company['website'];
+        $employe = $request->all();
+        $model->name = $employe['name'];
+        $model->email = $employe['email'];
+        $model->website = $employe['website'];
         $path = $request['logo'];
         $path = Storage::putFile('logos', new File($path));
         $model->logo = $path;
@@ -38,9 +33,9 @@ class CompaniesController extends Controller
 
     public function edit(Request $request, $id) 
     {
-        $company = Employees::find($id);
+        $employe = Companies::find($id);
         return response()->json([
-            'data' => $company
+            'data' => $employe
         ]);
     }
     public function update(Request $request, $id) 
@@ -48,22 +43,28 @@ class CompaniesController extends Controller
         
          $result = $request->all();
 
-         $model = Employees::find($id);
-        $company = $request->all();
-        $model->name = $company['firstName'];
-        $model->email = $company['LastName'];
-        $model->website = $company['company'];
+         $model = Companies::find($id);
+        $employe = $request->all();
+        $model->name = $employe['name'];
+        $model->email = $employe['email'];
+        $model->website = $employe['website'];
+        if($request['logo']) {
+            $path = $request['logo'];
+            $path = Storage::putFile('logos', new File($path));
+            $model->logo = $path;
+
+        }
        
         if($model->save() ) {
-            return 'Employe Updated successfully';   
+            return 'Company Updated successfully';   
         };
         return 'something went wrong'; 
     }
 
     public function delete(Request $request, $id) 
     {
-       $company = Employees::find($id); 
-       $company->delete(); 
+       $employe = Companies::find($id); 
+       $employe->delete(); 
        return $id;
         
         

@@ -18,11 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('api')->group(function() {
-    Route::prefix('companies')->group(function() {
-        Route::get('/','Api\CompaniesController@index');
+Route::group(['middleware' => ['api'] ], function() {
+    Route::prefix('/companies')->group(function() {
+        Route::get('/all','Api\CompaniesController@index');
         Route::post('/create', 'Api\CompaniesController@create');
-        Route::post('/edit', 'Api\CompaniesController@edit');
+        Route::get('{id}/editdata', 'Api\CompaniesController@edit');
+        Route::post('{id}/update', 'Api\CompaniesController@update');
+        Route::delete('{id}/delete', 'Api\CompaniesController@delete');
+        
     } );
     
 });
