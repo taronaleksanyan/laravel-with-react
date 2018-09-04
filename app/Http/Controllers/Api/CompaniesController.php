@@ -14,7 +14,7 @@ class CompaniesController extends Controller
 {
     public function index() 
     {
-        return new CompaniesCollection(Employees::all());
+        return new CompaniesCollection(Companies::all());
     }
 
     public function create(Request $request) 
@@ -27,7 +27,7 @@ class CompaniesController extends Controller
         $model->email = $company['email'];
         $model->website = $company['website'];
         $path = $request['logo'];
-        $path = Storage::putFile('logos', new File($path));
+        $path = Storage::putFile('public', new File($path));
         $model->logo = $path;
 
         if($model->save() ) {
@@ -38,7 +38,7 @@ class CompaniesController extends Controller
 
     public function edit(Request $request, $id) 
     {
-        $company = Employees::find($id);
+        $company = Companies::find($id);
         return response()->json([
             'data' => $company
         ]);
@@ -48,21 +48,23 @@ class CompaniesController extends Controller
         
          $result = $request->all();
 
-         $model = Employees::find($id);
+         $model = Companies::find($id);
         $company = $request->all();
-        $model->name = $company['firstName'];
-        $model->email = $company['LastName'];
-        $model->website = $company['company'];
-       
-        if($model->save() ) {
-            return 'Employe Updated successfully';   
-        };
-        return 'something went wrong'; 
-    }
+        $model->name = $company['name'];
+        $model->email = $company['email'];
+        $model->website = $company['website'];
+        if($request['logo']) {
+            $path = $request['logo'];
+            $path = Storage::putFile('public', new File($path));
+            $model->logo = $path;
 
+        }
+        $model->save();
+        return 'Company updated successfully';
+    }
     public function delete(Request $request, $id) 
     {
-       $company = Employees::find($id); 
+       $company = Companies::find($id); 
        $company->delete(); 
        return $id;
         
