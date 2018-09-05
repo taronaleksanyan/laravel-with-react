@@ -21,11 +21,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['api'] ], function() {
     Route::prefix('/companies')->group(function() {
         Route::get('/all','Api\CompaniesController@index');
+        Route::get('/paginate','Api\CompaniesController@paginate');
         Route::post('/create', 'Api\CompaniesController@create');
         Route::get('{id}/editdata', 'Api\CompaniesController@edit');
         Route::post('{id}/update', 'Api\CompaniesController@update');
         Route::delete('{id}/delete', 'Api\CompaniesController@delete');
         
+    } );
+    Route::prefix('/employees')->group(function() {
+        Route::get('/all','Api\EmployeesController@index');
+        Route::get('/paginate','Api\EmployeesController@paginate');
+        Route::post('/create', 'Api\EmployeesController@create');
+        Route::get('{id}/editdata', 'Api\EmployeesController@edit');
+        Route::post('{id}/update', 'Api\EmployeesController@update');
+        Route::delete('{id}/delete', 'Api\EmployeesController@delete');    
     } );
     
 });

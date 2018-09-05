@@ -38,10 +38,10 @@ class CompanyAdd extends Component {
                 <Nav />
                 <form onSubmit = {this.HandleOnSubmit} name='ads' className = "container mt-5">
                     <h2 className = {this.state.msgClass}>{this.state.msg}</h2>
-                    <input name = "name" placeholder = "Name" type = "text" onChange = {this.HandleOnChange} />
-                    <input name = "email" type = "email" placeholder = "E-MAIL" onChange = {this.HandleOnChange} />
+                    <input name = "name" placeholder = "Name" type = "text" />
+                    <input name = "email" type = "email" placeholder = "E-MAIL"/>
                     <input name = "logo" type = "file"  ref = {this.inputFile} />
-                    <input name = "website" type = "url" placeholder = "website" onChange = {this.HandleOnChange} />                                        
+                    <input name = "website" type = "url" placeholder = "website"/>                                        
                     <button type = "submit">Add</button>                    
                 </form>
             </React.Fragment>

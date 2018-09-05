@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-class Company extends Component {
+class Employe extends Component {
     constructor(props) {
         super(props);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
     }
 
     handleDeleteClick(){
-        let deleteUrl = `/api/companies/${this.props.id}/delete`;
+        let deleteUrl = `/api/employees/${this.props.id}/delete`;
         this.props.del(deleteUrl);
     }
     render() {
-        let editUrl = `/companies/${this.props.id}/edit`;
+        let editUrl = `/employees/${this.props.id}/edit`;
         
      return (  
         <React.Fragment>
@@ -28,4 +28,4 @@ class Company extends Component {
 
 }
 
-export default Company;
+export default Employe;
