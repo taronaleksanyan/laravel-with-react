@@ -16,7 +16,11 @@ class EmployeAdd extends Component {
    componentDidMount() {
 
 
-    axios.get('/api/companies/all').then(res => {
+    axios.get('/api/companies/all',{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+    }).then(res => {
         this.setState({
             companies: res.data.data
         });

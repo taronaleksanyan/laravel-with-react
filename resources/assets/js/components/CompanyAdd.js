@@ -12,7 +12,18 @@ class CompanyAdd extends Component {
         this.HandleOnChange = this.HandleOnChange.bind(this);
         this.HandleOnSubmit =  this.HandleOnSubmit.bind(this);
     }
-
+    componentDidMount() {
+      
+        axios.get(`/api/companies/add`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
+            }
+        }
+        ).then(res => {
+        });
+        
+       
+      }
     HandleOnChange(e){
         let newObj = this.state.newCompany;
         newObj[e.target.name] = e.target.value;
@@ -35,7 +46,6 @@ class CompanyAdd extends Component {
     render() {
         return (
             <React.Fragment>
-                <Nav />
                 <form onSubmit = {this.HandleOnSubmit} name='ads' className = "container mt-5">
                     <h2 className = {this.state.msgClass}>{this.state.msg}</h2>
                     <input name = "name" placeholder = "Name" type = "text" />

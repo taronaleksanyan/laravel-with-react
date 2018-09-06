@@ -21,9 +21,12 @@ class Companies extends Component{
 
   componentDidMount() {
       
-    axios.get(`/api/companies/paginate?page=${this.state.page}`).then(res => {
-        console.log(res.data);
-        
+    axios.get(`/api/companies/all`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+    }
+    ).then(res => {        
         this.setState({
             companies: res.data.data,
             last:res.data.last_page,
@@ -35,8 +38,6 @@ class Companies extends Component{
   deleteCompany(url) {
     axios.delete(url).then(res => {
         let arr = this.state.companies;
-        console.log(url);
-        console.log(res.data);
        arr =  arr.filter(value => {
             return value.id !== res.data
         });
@@ -73,7 +74,6 @@ class Companies extends Component{
     })
         return (
             <React.Fragment>
-                <Nav />
                 <div className = "container mt-5">
                 <h1>Companies <Link to = "/companies/add" className = "btn btn-success">Add new</Link> </h1>
                 {companies}

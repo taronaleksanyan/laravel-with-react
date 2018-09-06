@@ -14,7 +14,11 @@ class EmployeEdit extends Component {
     }
 
    componentDidMount() {
-    axios.get(`/api/employees/${this.props.match.params.id}/editdata`).then(res => {
+    axios.get(`/api/employees/${this.props.match.params.id}/editdata`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+    }).then(res => {
         this.setState({
             Employe: res.data.data
         });

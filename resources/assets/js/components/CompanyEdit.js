@@ -14,7 +14,11 @@ class CompanyAdd extends Component {
     }
 
    componentDidMount() {
-    axios.get(`/api/companies/${this.props.match.params.id}/editdata`).then(res => {
+    axios.get(`/api/companies/${this.props.match.params.id}/editdata`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+    }).then(res => {
         this.setState({
             company: res.data.data
         });

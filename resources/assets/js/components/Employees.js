@@ -20,7 +20,11 @@ class Employees extends Component{
   }
 
   componentDidMount() {
-    axios.get(`/api/employees/paginate?page=${this.state.page}`).then(res => {
+    axios.get(`/api/employees/paginate?page=${this.state.page}`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+        }
+    }).then(res => {
         console.log(res);
         
         this.setState({
@@ -47,7 +51,6 @@ class Employees extends Component{
   next(event){
     let page = event.target.innerHTML;
     axios.get(`/api/employees/paginate?page=${page}`).then(res => {
-        console.log(res.data);        
         this.setState({
             employees: res.data.data,
             last:res.data.last_page,
@@ -75,7 +78,6 @@ class Employees extends Component{
     
         return (
             <React.Fragment>
-                <Nav />
                 <div className = "container mt-5">
                 <h1>employees <Link to = "/employees/add" className = "btn btn-success">Add new</Link> </h1>
                 {employees}

@@ -1,8 +1,25 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
 
 class Nav extends Component {
+    constructor(props) {
+        super(props);
+        let auth = this.props.isAuth;
+        this.state = {
+            auth: auth
+        }
+        this.hanndleLogout = this.hanndleLogout.bind(this);
+    }
+
+    hanndleLogout() {
+        localStorage.clear();
+        this.props.logout(false);
+        this.setState({auth:false});
+    }
+   
     render() {
+        console.log(`state ${this.state.auth}`)
         return (
             <React.Fragment>
                  <nav className="navbar navbar-expand-md navbar-light navbar-laravel">
@@ -24,9 +41,11 @@ class Nav extends Component {
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/employees/paginate/1">Employees</Link>
                                     </li>
+                                    { (this.state.auth)? (
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/login">Login</Link>
-                                    </li>     
+                                        <span className=" btn nav-link" onClick = {this.hanndleLogout}>Logout</span>
+                                    </li> 
+                                ) :(<li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li> ) }   
                             </ul>
                         </div>
                     </div>
@@ -37,3 +56,4 @@ class Nav extends Component {
 } 
 
 export default  Nav;
+

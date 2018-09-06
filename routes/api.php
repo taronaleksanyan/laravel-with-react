@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['api'] ], function() {
+Route::group(['middleware' => ['api','jwt.auth'] ], function() {
     Route::prefix('/companies')->group(function() {
         Route::get('/all','Api\CompaniesController@index');
         Route::get('/paginate','Api\CompaniesController@paginate');
@@ -37,4 +37,7 @@ Route::group(['middleware' => ['api'] ], function() {
         Route::delete('{id}/delete', 'Api\EmployeesController@delete');    
     } );
     
+    
 });
+
+Route::post('/login', 'Api\LoginController@login');
