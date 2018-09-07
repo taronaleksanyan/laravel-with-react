@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import Employe from './Employe';
 
 import Nav from './Nav';
-import axios from 'axios';
+import sendRequest from './dataService';
 
 
 class Employees extends Component{
@@ -20,11 +20,7 @@ class Employees extends Component{
   }
 
   componentDidMount() {
-    axios.get(`/api/employees/paginate?page=${this.state.page}`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
-        }
-    }).then(res => {
+    sendRequest(`/api/employees/paginate?page=${this.state.page}`).then(res => {
         console.log(res);
         
         this.setState({
@@ -36,9 +32,8 @@ class Employees extends Component{
    
   }
   deleteEmploye(url) {
-    axios.delete(url).then(res => {
+    sendRequest(url, 'DELETE').then(res => {
         let arr = this.state.employees;
-        console.log(res.data);
        arr =  arr.filter(value => {
             return value.id !== res.data
         });
@@ -50,7 +45,7 @@ class Employees extends Component{
   
   next(event){
     let page = event.target.innerHTML;
-    axios.get(`/api/employees/paginate?page=${page}`).then(res => {
+    sendRequest(`/api/employees/paginate?page=${page}`).then(res => {
         this.setState({
             employees: res.data.data,
             last:res.data.last_page,

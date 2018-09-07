@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Nav from './Nav';
-import axios from 'axios';
+import sendRequest from './dataService';
 class CompanyAdd extends Component {
     constructor(props) {
         super(props);
@@ -14,11 +14,7 @@ class CompanyAdd extends Component {
     }
     componentDidMount() {
       
-        axios.get(`/api/companies/add`,{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}` 
-            }
-        }
+        sendRequest(`/api/companies/add`
         ).then(res => {
         });
         
@@ -33,7 +29,7 @@ class CompanyAdd extends Component {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        axios.post('/api/companies/create', formData, {headers:{'Content-Type': 'multipart/form-data' }}).then(response => {
+        sendRequest('/api/companies/create','POST', formData).then(response => {
             this.setState({
                 msg:response.data,
                 msgClass:'text-success'

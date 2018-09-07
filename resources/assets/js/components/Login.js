@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import axios from 'axios';
+import sendRequest from './dataService';
 import Nav from './Nav';
 class Login extends Component {
     constructor(props) {
         super(props);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
-        this.state = {
-            login: this.props.isAuth
-        }
+        
 
     }
     handleOnChange(event) {
@@ -24,13 +22,11 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-         axios.post('/api/login',data).then(res => {
+         sendRequest('/api/login', 'POST',data,false).then(res => {
+            console.log(res.data.token); 
             localStorage.setItem('token', res.data.token);
             this.props.changeAuth(true);
-            this.setState({
-                login:false
-            })
-            this.props.history.push('/admin');
+            window.location.href = '/companies/paginate/1'; 
          });
     }
 

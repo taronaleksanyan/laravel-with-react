@@ -575,25 +575,33 @@ var Nav = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (Nav.__proto__ || Object.getPrototypeOf(Nav)).call(this, props));
 
+        _this.hanndleLogout = _this.hanndleLogout.bind(_this);
         var auth = _this.props.isAuth;
         _this.state = {
-            auth: auth
+            isAuth: auth
         };
-        _this.hanndleLogout = _this.hanndleLogout.bind(_this);
         return _this;
     }
 
     _createClass(Nav, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var auth = this.props.isAuth;
+            this.setState({
+                isAuth: auth
+            });
+        }
+    }, {
         key: 'hanndleLogout',
         value: function hanndleLogout() {
             localStorage.clear();
-            this.props.logout(false);
-            this.setState({ auth: false });
+            this.setState({ isAuth: false });
+            this.props.changeAuth(false);
         }
     }, {
         key: 'render',
         value: function render() {
-            console.log('state ' + this.state.auth);
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment,
                 null,
@@ -637,7 +645,7 @@ var Nav = function (_Component) {
                                         'Employees'
                                     )
                                 ),
-                                this.state.auth ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                this.state.isAuth ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'li',
                                     { className: 'nav-item' },
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -15819,7 +15827,7 @@ var generatePath = function generatePath() {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(39);
-module.exports = __webpack_require__(119);
+module.exports = __webpack_require__(120);
 
 
 /***/ }),
@@ -38083,14 +38091,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Nav__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Home__ = __webpack_require__(107);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Companies__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__CompanyAdd__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__CompanyEdit__ = __webpack_require__(111);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Employees__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__EmployeAdd__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__EmployeEdit__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Login__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__PrivateRoute__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__PublicRoute__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__CompanyAdd__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__CompanyEdit__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Employees__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__EmployeAdd__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__EmployeEdit__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Login__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__PrivateRoute__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__PublicRoute__ = __webpack_require__(119);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38140,7 +38148,6 @@ var App = function (_Component) {
     _createClass(App, [{
         key: 'changeAuth',
         value: function changeAuth(auth) {
-            console.log('app working ' + this.state.isAuth);
             this.setState({ isAuth: auth });
         }
     }, {
@@ -38155,7 +38162,7 @@ var App = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Nav__["a" /* default */], { logout: this.changeAuth, isAuth: this.state.isAuth }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Nav__["a" /* default */], { changeAuth: this.changeAuth, isAuth: this.state.isAuth }),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["e" /* Switch */],
                             null,
@@ -60663,8 +60670,7 @@ var Home = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Company__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -60704,11 +60710,7 @@ var Companies = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('/api/companies/all', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])('/api/companies/all').then(function (res) {
                 _this2.setState({
                     companies: res.data.data,
                     last: res.data.last_page
@@ -60720,7 +60722,7 @@ var Companies = function (_Component) {
         value: function deleteCompany(url) {
             var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.delete(url).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])(url, 'delete').then(function (res) {
                 var arr = _this3.state.companies;
                 arr = arr.filter(function (value) {
                     return value.id !== res.data;
@@ -60736,15 +60738,12 @@ var Companies = function (_Component) {
             var _this4 = this;
 
             var page = event.target.innerHTML;
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('/api/companies/paginate?page=' + page).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])('/api/companies/paginate?page=' + page).then(function (res) {
 
                 _this4.setState({
                     companies: res.data.data,
-                    last: res.data.last_page
+                    page: page
                 });
-            });
-            this.setState({
-                page: page
             });
         }
     }, {
@@ -60882,11 +60881,41 @@ var Company = function (_Component) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = sendRequest;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+
+
+var defaultHeader = { Authorization: 'Bearer ' + localStorage.getItem('token') };
+
+function sendRequest(url) {
+    var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'get';
+    var data = arguments[2];
+    var withHeaders = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var headers = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : defaultHeader;
+
+    var obj = {
+        method: method,
+        url: url
+    };
+    if (data !== undefined && data !== {}) {
+        obj['data'] = data;
+    }
+    if (headers !== undefined && withHeaders === true) {
+        obj['headers'] = headers;
+    }
+    return __WEBPACK_IMPORTED_MODULE_0_axios___default()(obj);
+}
+
+/***/ }),
+/* 111 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -60921,11 +60950,7 @@ var CompanyAdd = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
 
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('/api/companies/add', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {});
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/companies/add').then(function (res) {});
         }
     }, {
         key: 'HandleOnChange',
@@ -60941,7 +60966,7 @@ var CompanyAdd = function (_Component) {
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/companies/create', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/companies/create', 'POST', formData).then(function (response) {
                 _this2.setState({
                     msg: response.data,
                     msgClass: 'text-success'
@@ -60982,15 +61007,14 @@ var CompanyAdd = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (CompanyAdd);
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61024,28 +61048,18 @@ var CompanyAdd = function (_Component) {
     _createClass(CompanyAdd, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('/api/companies/' + this.props.match.params.id + '/editdata', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {
-                _this2.setState({
-                    company: res.data.data
-                });
-            });
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/companies/' + this.props.match.params.id + '/editdata');
         }
     }, {
         key: 'HandleOnSubmit',
         value: function HandleOnSubmit(event) {
-            var _this3 = this;
+            var _this2 = this;
 
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/companies/' + this.props.match.params.id + '/update', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(function (response) {
-                _this3.setState({
+            axios.post('/api/companies/' + this.props.match.params.id + '/update', 'POST', formData).then(function (response) {
+                _this2.setState({
                     msg: response.data,
                     msgClass: 'text-success'
                 });
@@ -61057,7 +61071,6 @@ var CompanyAdd = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment,
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Nav__["a" /* default */], null),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'form',
                     { onSubmit: this.HandleOnSubmit, name: 'ads', className: 'container mt-5' },
@@ -61086,17 +61099,16 @@ var CompanyAdd = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (CompanyAdd);
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Employe__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Employe__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61136,11 +61148,7 @@ var Employees = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('/api/employees/paginate?page=' + this.state.page, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])('/api/employees/paginate?page=' + this.state.page).then(function (res) {
                 console.log(res);
 
                 _this2.setState({
@@ -61154,9 +61162,8 @@ var Employees = function (_Component) {
         value: function deleteEmploye(url) {
             var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.delete(url).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])(url, 'DELETE').then(function (res) {
                 var arr = _this3.state.employees;
-                console.log(res.data);
                 arr = arr.filter(function (value) {
                     return value.id !== res.data;
                 });
@@ -61171,7 +61178,7 @@ var Employees = function (_Component) {
             var _this4 = this;
 
             var page = event.target.innerHTML;
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('/api/employees/paginate?page=' + page).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])('/api/employees/paginate?page=' + page).then(function (res) {
                 _this4.setState({
                     employees: res.data.data,
                     last: res.data.last_page,
@@ -61237,7 +61244,7 @@ var Employees = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Employees);
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61315,15 +61322,14 @@ var Employe = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Employe);
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61359,11 +61365,7 @@ var EmployeAdd = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('/api/companies/all', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/companies/all').then(function (res) {
                 _this2.setState({
                     companies: res.data.data
                 });
@@ -61377,7 +61379,7 @@ var EmployeAdd = function (_Component) {
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/employees/create', formData).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/employees/create', 'POST', formData).then(function (response) {
                 _this3.setState({
                     msg: response.data,
                     msgClass: 'text-success'
@@ -61390,7 +61392,6 @@ var EmployeAdd = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment,
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Nav__["a" /* default */], null),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'form',
                     { onSubmit: this.HandleOnSubmit, name: 'ads', className: 'container mt-5' },
@@ -61432,15 +61433,14 @@ var EmployeAdd = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (EmployeAdd);
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Nav__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dataService__ = __webpack_require__(110);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61448,6 +61448,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -61476,17 +61477,13 @@ var EmployeEdit = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('/api/employees/' + this.props.match.params.id + '/editdata', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/employees/' + this.props.match.params.id + '/editdata').then(function (res) {
                 _this2.setState({
                     Employe: res.data.data
                 });
             });
 
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get('/api/companies/all').then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/companies/all').then(function (res) {
                 _this2.setState({
                     companies: res.data.data
                 });
@@ -61500,7 +61497,7 @@ var EmployeEdit = function (_Component) {
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/employees/' + this.props.match.params.id + '/update', formData).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/employees/' + this.props.match.params.id + '/update', 'POST', formData).then(function (response) {
                 _this3.setState({
                     msg: response.data,
                     msgClass: 'text-success'
@@ -61515,7 +61512,6 @@ var EmployeEdit = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment,
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Nav__["a" /* default */], null),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'form',
                     { onSubmit: this.HandleOnSubmit, name: 'ads', className: 'container mt-5' },
@@ -61564,15 +61560,14 @@ var EmployeEdit = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (EmployeEdit);
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dataService__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Nav__ = __webpack_require__(6);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -61599,9 +61594,6 @@ var Login = function (_Component) {
 
         _this.handleOnSubmit = _this.handleOnSubmit.bind(_this);
         _this.handleOnChange = _this.handleOnChange.bind(_this);
-        _this.state = {
-            login: _this.props.isAuth
-        };
 
         return _this;
     }
@@ -61621,13 +61613,11 @@ var Login = function (_Component) {
                 email: this.state.email,
                 password: this.state.password
             };
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/api/login', data).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])('/api/login', 'POST', data, false).then(function (res) {
+                console.log(res.data.token);
                 localStorage.setItem('token', res.data.token);
                 _this2.props.changeAuth(true);
-                _this2.setState({
-                    login: false
-                });
-                _this2.props.history.push('/admin');
+                window.location.href = '/companies/paginate/1';
             });
         }
     }, {
@@ -61658,7 +61648,7 @@ var Login = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Login);
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61678,8 +61668,7 @@ var PrivateRoute = function PrivateRoute(_ref) {
         rest = _objectWithoutProperties(_ref, ['component', 'isAuth']);
 
     console.log('IS AUTH', isAuth);
-    console.log(Component);
-    console.log(rest);
+
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["d" /* Route */], _extends({}, rest, {
         render: function render(props) {
             return isAuth ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Component, _extends({}, props, rest, { isAuth: isAuth })) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["c" /* Redirect */], { to: '/login' });
@@ -61690,7 +61679,7 @@ var PrivateRoute = function PrivateRoute(_ref) {
 /* harmony default export */ __webpack_exports__["a"] = (PrivateRoute);
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61719,7 +61708,7 @@ var PublicRoute = function PublicRoute(_ref) {
 /* harmony default export */ __webpack_exports__["a"] = (PublicRoute);
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

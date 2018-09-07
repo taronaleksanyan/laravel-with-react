@@ -31,8 +31,7 @@ export default class App extends Component {
         this.changeAuth = this.changeAuth.bind(this);
     }
     changeAuth(auth) {
-        console.log(`app working ${this.state.isAuth}`);
-        this.setState({isAuth:auth});
+        this.setState({isAuth:auth});        
     }
     render() {
         return (
@@ -40,10 +39,10 @@ export default class App extends Component {
            
             <Router>  
                 <div>
-                    <Nav logout = {this.changeAuth} isAuth = {this.state.isAuth} />       
+                    <Nav changeAuth = {this.changeAuth} isAuth = {this.state.isAuth} />       
                     <Switch>
                         <Route exact path='/' component={Home} />
-                        <PrivateRoute path= '/companies/paginate/:p'       isAuth = {this.state.isAuth} component = {Companies}/>
+                        <PrivateRoute path= '/companies/paginate/:p'     isAuth = {this.state.isAuth} component = {Companies}/>
                         <PrivateRoute exact path= '/companies/add'         isAuth = {this.state.isAuth} component = {CompanyAdd}/>
                         <PrivateRoute exact path= '/companies/:id/edit/'   isAuth = {this.state.isAuth} component = {CompanyEdit}/>
                         <PrivateRoute exact path= '/employees/paginate/:p' isAuth = {this.state.isAuth} component = {Employees}/>

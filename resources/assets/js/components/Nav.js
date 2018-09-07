@@ -5,21 +5,29 @@ import axios from 'axios';
 class Nav extends Component {
     constructor(props) {
         super(props);
+        this.hanndleLogout = this.hanndleLogout.bind(this);
         let auth = this.props.isAuth;
         this.state = {
-            auth: auth
+            isAuth:auth
         }
-        this.hanndleLogout = this.hanndleLogout.bind(this);
+    }
+
+    componentDidMount() {
+       let auth = this.props.isAuth;
+        this.setState({
+            isAuth: auth
+        });
+        
     }
 
     hanndleLogout() {
         localStorage.clear();
-        this.props.logout(false);
-        this.setState({auth:false});
+        this.setState({isAuth:false});
+        this.props.changeAuth(false);
     }
    
     render() {
-        console.log(`state ${this.state.auth}`)
+       
         return (
             <React.Fragment>
                  <nav className="navbar navbar-expand-md navbar-light navbar-laravel">
@@ -41,11 +49,11 @@ class Nav extends Component {
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/employees/paginate/1">Employees</Link>
                                     </li>
-                                    { (this.state.auth)? (
+                                    { (this.state.isAuth)? (
                                     <li className="nav-item">
                                         <span className=" btn nav-link" onClick = {this.hanndleLogout}>Logout</span>
                                     </li> 
-                                ) :(<li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li> ) }   
+                                ) :(<li className="nav-item"><Link className="nav-link" to="/login"  >Login</Link></li> ) }   
                             </ul>
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Nav from './Nav';
-import axios from 'axios';
+
+import sendRequest from './dataService';
 class EmployeEdit extends Component {
     constructor(props) {
         super(props);
@@ -14,17 +15,13 @@ class EmployeEdit extends Component {
     }
 
    componentDidMount() {
-    axios.get(`/api/employees/${this.props.match.params.id}/editdata`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
-        }
-    }).then(res => {
+    sendRequest(`/api/employees/${this.props.match.params.id}/editdata`).then(res => {
         this.setState({
             Employe: res.data.data
         });
     });
 
-    axios.get('/api/companies/all').then(res => {
+   sendRequest('/api/companies/all').then(res => {
         this.setState({
             companies: res.data.data
         });
@@ -36,7 +33,7 @@ class EmployeEdit extends Component {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        axios.post(`/api/employees/${this.props.match.params.id}/update`, formData).then(response => {
+        sendRequest(`/api/employees/${this.props.match.params.id}/update`, 'POST' ,formData).then(response => {
             this.setState({
                 msg:response.data,
                 msgClass:'text-success'
@@ -49,7 +46,6 @@ class EmployeEdit extends Component {
     render() {
         return (
             <React.Fragment>
-                <Nav />
                 <form onSubmit = {this.HandleOnSubmit} name='ads' className = "container mt-5">
                     <h2 className = {this.state.msgClass}>{this.state.msg}</h2>
                     <input name = "firstName" placeholder = "First name" type = "text" defaultValue = {this.state.Employe.firstName}  />

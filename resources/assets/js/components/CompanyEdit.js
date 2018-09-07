@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Nav from './Nav';
-import axios from 'axios';
+import sendRequest from './dataService';
 class CompanyAdd extends Component {
     constructor(props) {
         super(props);
@@ -14,22 +14,14 @@ class CompanyAdd extends Component {
     }
 
    componentDidMount() {
-    axios.get(`/api/companies/${this.props.match.params.id}/editdata`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
-        }
-    }).then(res => {
-        this.setState({
-            company: res.data.data
-        });
-    });
+        sendRequest(`/api/companies/${this.props.match.params.id}/editdata`);
    }
 
     HandleOnSubmit(event) {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        axios.post(`/api/companies/${this.props.match.params.id}/update`, formData, {headers:{'Content-Type': 'multipart/form-data' }}).then(response => {
+        axios.post(`/api/companies/${this.props.match.params.id}/update`, 'POST', formData).then(response => {
             this.setState({
                 msg:response.data,
                 msgClass:'text-success'
@@ -42,7 +34,6 @@ class CompanyAdd extends Component {
     render() {
         return (
             <React.Fragment>
-                <Nav />
                 <form onSubmit = {this.HandleOnSubmit} name='ads' className = "container mt-5">
                     <h2 className = {this.state.msgClass}>{this.state.msg}</h2>
                     <input name = "name" placeholder = "Name" type = "text" defaultValue = {this.state.company.name}  />

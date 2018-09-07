@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Nav from './Nav';
-import axios from 'axios';
+import sendRequest from './dataService';
 class EmployeAdd extends Component {
     constructor(props) {
         super(props);
@@ -14,13 +14,7 @@ class EmployeAdd extends Component {
     }
 
    componentDidMount() {
-
-
-    axios.get('/api/companies/all',{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
-        }
-    }).then(res => {
+    sendRequest('/api/companies/all').then(res => {
         this.setState({
             companies: res.data.data
         });
@@ -32,7 +26,7 @@ class EmployeAdd extends Component {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        axios.post(`/api/employees/create`, formData).then(response => {
+        sendRequest(`/api/employees/create`, 'POST', formData).then(response => {
             this.setState({
                 msg:response.data,
                 msgClass:'text-success'
@@ -45,7 +39,6 @@ class EmployeAdd extends Component {
     render() {
         return (
             <React.Fragment>
-                <Nav />
                 <form onSubmit = {this.HandleOnSubmit} name='ads' className = "container mt-5">
                     <h2 className = {this.state.msgClass}>{this.state.msg}</h2>
                     <input name = "firstName" placeholder = "First name" type = "text" defaultValue = {this.state.Employe.firstName}  />

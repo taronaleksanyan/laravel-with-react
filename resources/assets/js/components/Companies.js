@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import Company from './Company';
 
 import Nav from './Nav';
-import axios from 'axios';
+import sendRequest from './dataService';
 
 
 class Companies extends Component{
@@ -21,11 +21,7 @@ class Companies extends Component{
 
   componentDidMount() {
       
-    axios.get(`/api/companies/all`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
-        }
-    }
+    sendRequest(`/api/companies/all`
     ).then(res => {        
         this.setState({
             companies: res.data.data,
@@ -36,9 +32,9 @@ class Companies extends Component{
    
   }
   deleteCompany(url) {
-    axios.delete(url).then(res => {
+    sendRequest(url, 'delete').then(res => {
         let arr = this.state.companies;
-       arr =  arr.filter(value => {
+        arr =  arr.filter(value => {
             return value.id !== res.data
         });
         this.setState({
@@ -49,16 +45,14 @@ class Companies extends Component{
 
   next(event){
     let page = event.target.innerHTML;
-    axios.get(`/api/companies/paginate?page=${page}`).then(res => {
+    sendRequest(`/api/companies/paginate?page=${page}`).then(res => {
         
         this.setState({
             companies: res.data.data,
-            last:res.data.last_page,
+            page:page
         });
     });
-    this.setState({
-        page:page
-    })
+
   }
   
   render() {
