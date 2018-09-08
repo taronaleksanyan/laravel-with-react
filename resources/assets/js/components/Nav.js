@@ -18,7 +18,6 @@ class Nav extends Component {
     }
 
     render() {
-        console.log(this.state.isAuth)
         return (
             <React.Fragment>
                 <nav className="navbar navbar-expand-md navbar-light navbar-laravel">

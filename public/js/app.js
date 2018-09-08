@@ -584,7 +584,6 @@ var Nav = function (_Component) {
     }, {
         key: "render",
         value: function render() {
-            console.log(this.state.isAuth);
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment,
                 null,
@@ -61124,7 +61123,7 @@ var CompanyAdd = function (_Component) {
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            axios.post("/api/companies/" + this.props.match.params.id + "/update", "POST", formData).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/" + this.props.match.params.id + "/update", "POST", formData).then(function (response) {
                 _this3.setState({
                     msg: response.data,
                     msgClass: "text-success"
@@ -61171,7 +61170,7 @@ var CompanyAdd = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "button",
                         { type: "submit" },
-                        "Add"
+                        "Edit"
                     )
                 )
             );

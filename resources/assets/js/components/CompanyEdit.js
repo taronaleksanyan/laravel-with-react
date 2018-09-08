@@ -23,8 +23,7 @@ class CompanyAdd extends Component {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        axios
-            .post(
+        sendRequest(
                 `/api/companies/${this.props.match.params.id}/update`,
                 "POST",
                 formData
@@ -65,7 +64,7 @@ class CompanyAdd extends Component {
                         placeholder="website"
                         defaultValue={this.state.company.website}
                     />
-                    <button type="submit">Add</button>
+                    <button type="submit">Edit</button>
                 </form>
             </React.Fragment>
         );
