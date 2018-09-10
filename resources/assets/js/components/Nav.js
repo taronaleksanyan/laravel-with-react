@@ -13,7 +13,6 @@ class Nav extends Component {
 
     hanndleLogout() {
         localStorage.clear();
-        this.setState({ isAuth: false });
         this.props.changeAuth(false);
     }
 
