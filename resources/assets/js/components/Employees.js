@@ -60,7 +60,7 @@ class Employees extends Component {
         let employees = this.state.employees.map((value, i) => {
             return (
                 <Employe
-                    name={value.firstName}
+                    name={value.first_name}
                     key={value.id}
                     id={value.id}
                     del={this.deleteEmploye}

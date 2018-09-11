@@ -19,7 +19,8 @@ class Companies extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/companies/all`).then(res => {
+        sendRequest(`/companies`).then(res => {
+            console.log(res.data);
             this.setState({
                 companies: res.data.data,
                 last: res.data.last_page
@@ -40,7 +41,7 @@ class Companies extends Component {
 
     next(event) {
         let page = event.target.innerHTML;
-        sendRequest(`/api/companies/paginate?page=${page}`).then(res => {
+        sendRequest(`/api/companies?page=${page}`).then(res => {
             this.setState({
                 companies: res.data.data,
                 page: page
@@ -49,16 +50,22 @@ class Companies extends Component {
     }
 
     render() {
-        let companies = this.state.companies.map((value, i) => {
-            return (
-                <Company
-                    name={value.name}
-                    key={value.id}
-                    id={value.id}
-                    del={this.deleteCompany}
-                />
-            );
-        });
+        let result;
+        if(this.state.companies !== undefined){
+            let result = this.state.companies.map((value, i) => {
+                return (
+                    <Company
+                        name={value.name}
+                        key={value.id}
+                        id={value.id}
+                        del={this.deleteCompany}
+                    />
+                );
+            });
+        } else {
+            result = 'no companies found';
+        }
+        
         let buttons = [];
         for (let i = 1; i <= this.state.last; i++) {
             buttons.push(i);
@@ -84,7 +91,7 @@ class Companies extends Component {
                             Add new
                         </Link>{" "}
                     </h1>
-                    {companies}
+                    {result}
                     <div className="mt-3">{buttons}</div>
                 </div>
             </React.Fragment>

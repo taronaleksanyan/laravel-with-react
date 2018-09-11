@@ -44,7 +44,7 @@ class Nav extends Component {
                                 <li className="nav-item">
                                     <Link
                                         className="nav-link"
-                                        to="/companies/paginate/1"
+                                        to="/companies"
                                     >
                                         Companies
                                     </Link>
@@ -52,7 +52,7 @@ class Nav extends Component {
                                 <li className="nav-item">
                                     <Link
                                         className="nav-link"
-                                        to="/employees/paginate/1"
+                                        to="/employees/"
                                     >
                                         Employees
                                     </Link>

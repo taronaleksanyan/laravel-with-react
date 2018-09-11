@@ -4,28 +4,21 @@ import sendRequest from "./dataService";
 class CompanyAdd extends Component {
     constructor(props) {
         super(props);
-        this.inputFile = React.createRef();
         this.state = {
             msg: "Create new Company",
             msgClass: "text-primary"
         };
-        this.HandleOnChange = this.HandleOnChange.bind(this);
         this.HandleOnSubmit = this.HandleOnSubmit.bind(this);
-    }
-    
-    HandleOnChange(e) {
-        let newObj = this.state.newCompany;
-        newObj[e.target.name] = e.target.value;
     }
 
     HandleOnSubmit(event) {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        sendRequest("/api/companies/create", "POST", formData).then(
+        sendRequest("/api/companies/store", "POST", formData).then(
             response => {
                 this.setState({
-                    msg: response.data,
+                    msg: response.data.msg,
                     msgClass: "text-success"
                 });
             }

@@ -18,26 +18,30 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['api','jwt.auth'] ], function() {
-    Route::prefix('/companies')->group(function() {
-        Route::get('/all','Api\CompaniesController@index');
-        Route::get('/paginate','Api\CompaniesController@paginate');
-        Route::post('/create', 'Api\CompaniesController@create');
-        Route::get('{id}/editdata', 'Api\CompaniesController@edit');
-        Route::post('{id}/update', 'Api\CompaniesController@update');
-        Route::delete('{id}/delete', 'Api\CompaniesController@delete');
+// Route::group(['middleware' => ['api','jwt.auth'] ], function() {
+//     Route::prefix('/companies')->group(function() {
+//         Route::get('/all','Api\CompaniesController@index');
+//         Route::get('/paginate','Api\CompaniesController@paginate');
+//         Route::post('/create', 'Api\CompaniesController@create');
+//         Route::get('{id}/editdata', 'Api\CompaniesController@edit');
+//         Route::post('{id}/update', 'Api\CompaniesController@update');
+//         Route::delete('{id}/delete', 'Api\CompaniesController@delete');
         
-    } );
-    Route::prefix('/employees')->group(function() {
-        Route::get('/all','Api\EmployeesController@index');
-        Route::get('/paginate','Api\EmployeesController@paginate');
-        Route::post('/create', 'Api\EmployeesController@create');
-        Route::get('{id}/editdata', 'Api\EmployeesController@edit');
-        Route::post('{id}/update', 'Api\EmployeesController@update');
-        Route::delete('{id}/delete', 'Api\EmployeesController@delete');    
-    } );
+//     } );
+//     Route::prefix('/employees')->group(function() {
+//         Route::get('/all','Api\EmployeesController@index');
+//         Route::get('/paginate','Api\EmployeesController@paginate');
+//         Route::post('/create', 'Api\EmployeesController@create');
+//         Route::get('{id}/editdata', 'Api\EmployeesController@edit');
+//         Route::post('{id}/update', 'Api\EmployeesController@update');
+//         Route::delete('{id}/delete', 'Api\EmployeesController@delete');    
+//     } );
     
     
+// });
+
+Route::group(['middleware' => ['api', 'jwt.auth']], function() {
+    Route::resource('api/companies', 'Api\CompaniesController')->except('show','create','edit');
 });
 
 Route::post('/login', 'Api\LoginController@login');

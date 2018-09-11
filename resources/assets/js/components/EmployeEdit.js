@@ -56,13 +56,13 @@ class EmployeEdit extends Component {
                 >
                     <h2 className={this.state.msgClass}>{this.state.msg}</h2>
                     <input
-                        name="firstName"
+                        name="first_name"
                         placeholder="First name"
                         type="text"
                         defaultValue={this.state.Employe.firstName}
                     />
                     <input
-                        name="lastName"
+                        name="last_name"
                         type="text"
                         placeholder="Last name"
                         defaultValue={this.state.Employe.lastName}

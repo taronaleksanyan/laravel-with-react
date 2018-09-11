@@ -578,7 +578,6 @@ var Nav = function (_Component) {
         key: "hanndleLogout",
         value: function hanndleLogout() {
             localStorage.clear();
-            this.setState({ isAuth: false });
             this.props.changeAuth(false);
         }
     }, {
@@ -627,7 +626,7 @@ var Nav = function (_Component) {
                                         __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
                                         {
                                             className: "nav-link",
-                                            to: "/companies/paginate/1"
+                                            to: "/companies"
                                         },
                                         "Companies"
                                     )
@@ -639,7 +638,7 @@ var Nav = function (_Component) {
                                         __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
                                         {
                                             className: "nav-link",
-                                            to: "/employees/paginate/1"
+                                            to: "/employees/"
                                         },
                                         "Employees"
                                     )
@@ -38214,7 +38213,8 @@ var App = function (_Component) {
                             null,
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { exact: true, path: "/", component: __WEBPACK_IMPORTED_MODULE_5__Home__["a" /* default */] }),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__PrivateRoute__["a" /* default */], {
-                                path: "/companies/paginate/:p",
+                                exact: true,
+                                path: "/companies/",
                                 isAuth: this.state.isAuth,
                                 component: __WEBPACK_IMPORTED_MODULE_6__Companies__["a" /* default */]
                             }),
@@ -60791,7 +60791,8 @@ var Companies = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/companies/all").then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/companies").then(function (res) {
+                console.log(res.data);
                 _this2.setState({
                     companies: res.data.data,
                     last: res.data.last_page
@@ -60819,7 +60820,7 @@ var Companies = function (_Component) {
             var _this4 = this;
 
             var page = event.target.innerHTML;
-            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/companies/paginate?page=" + page).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/companies?page=" + page).then(function (res) {
                 _this4.setState({
                     companies: res.data.data,
                     page: page
@@ -60831,14 +60832,20 @@ var Companies = function (_Component) {
         value: function render() {
             var _this5 = this;
 
-            var companies = this.state.companies.map(function (value, i) {
-                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Company__["a" /* default */], {
-                    name: value.name,
-                    key: value.id,
-                    id: value.id,
-                    del: _this5.deleteCompany
+            var result = void 0;
+            if (this.state.companies !== undefined) {
+                var _result = this.state.companies.map(function (value, i) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Company__["a" /* default */], {
+                        name: value.name,
+                        key: value.id,
+                        id: value.id,
+                        del: _this5.deleteCompany
+                    });
                 });
-            });
+            } else {
+                result = 'no companies found';
+            }
+
             var buttons = [];
             for (var i = 1; i <= this.state.last; i++) {
                 buttons.push(i);
@@ -60873,7 +60880,7 @@ var Companies = function (_Component) {
                         ),
                         " "
                     ),
-                    companies,
+                    result,
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "div",
                         { className: "mt-3" },
@@ -60999,23 +61006,15 @@ var CompanyAdd = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (CompanyAdd.__proto__ || Object.getPrototypeOf(CompanyAdd)).call(this, props));
 
-        _this.inputFile = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createRef();
         _this.state = {
             msg: "Create new Company",
             msgClass: "text-primary"
         };
-        _this.HandleOnChange = _this.HandleOnChange.bind(_this);
         _this.HandleOnSubmit = _this.HandleOnSubmit.bind(_this);
         return _this;
     }
 
     _createClass(CompanyAdd, [{
-        key: "HandleOnChange",
-        value: function HandleOnChange(e) {
-            var newObj = this.state.newCompany;
-            newObj[e.target.name] = e.target.value;
-        }
-    }, {
         key: "HandleOnSubmit",
         value: function HandleOnSubmit(event) {
             var _this2 = this;
@@ -61023,9 +61022,9 @@ var CompanyAdd = function (_Component) {
             event.preventDefault();
             var form = document.forms.namedItem("ads");
             var formData = new FormData(form);
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/create", "POST", formData).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/store", "POST", formData).then(function (response) {
                 _this2.setState({
-                    msg: response.data,
+                    msg: response.data.msg,
                     msgClass: "text-success"
                 });
             });
@@ -61280,7 +61279,7 @@ var Employees = function (_Component) {
 
             var employees = this.state.employees.map(function (value, i) {
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Employe__["a" /* default */], {
-                    name: value.firstName,
+                    name: value.first_name,
                     key: value.id,
                     id: value.id,
                     del: _this5.deleteEmploye
@@ -61503,13 +61502,13 @@ var EmployeAdd = function (_Component) {
                         this.state.msg
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                        name: "firstName",
+                        name: "first_name",
                         placeholder: "First name",
                         type: "text",
                         defaultValue: this.state.Employe.firstName
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                        name: "lastName",
+                        name: "last_name",
                         type: "text",
                         placeholder: "Last name",
                         defaultValue: this.state.Employe.lastName
@@ -61647,13 +61646,13 @@ var EmployeEdit = function (_Component) {
                         this.state.msg
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                        name: "firstName",
+                        name: "first_name",
                         placeholder: "First name",
                         type: "text",
                         defaultValue: this.state.Employe.firstName
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                        name: "lastName",
+                        name: "last_name",
                         type: "text",
                         placeholder: "Last name",
                         defaultValue: this.state.Employe.lastName

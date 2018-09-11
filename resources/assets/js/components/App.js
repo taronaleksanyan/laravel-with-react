@@ -46,7 +46,8 @@ export default class App extends Component {
                         <Switch>
                             <Route exact path="/" component={Home} />
                             <PrivateRoute
-                                path="/companies/paginate/:p"
+                                exact
+                                path="/companies/"
                                 isAuth={this.state.isAuth}
                                 component={Companies}
                             />
