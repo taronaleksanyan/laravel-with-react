@@ -19,8 +19,7 @@ class Companies extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/companies`).then(res => {
-            console.log(res.data);
+        sendRequest(`/api/companies?page=1`).then(res => {
             this.setState({
                 companies: res.data.data,
                 last: res.data.last_page
@@ -51,8 +50,9 @@ class Companies extends Component {
 
     render() {
         let result;
+        
         if(this.state.companies !== undefined){
-            let result = this.state.companies.map((value, i) => {
+             result = this.state.companies.map((value, i) => {
                 return (
                     <Company
                         name={value.name}
@@ -75,7 +75,7 @@ class Companies extends Component {
                 <Link
                     className="btn btn-default"
                     key={i + "0000"}
-                    to={`/companies/paginate/${i + 1}`}
+                    to={`/companies?page=${i + 1}`}
                     onClick={this.next}
                 >
                     {value}

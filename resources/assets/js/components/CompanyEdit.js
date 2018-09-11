@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Nav from "./Nav";
-import sendRequest from "./dataService";
+import dataService from "./dataService";
 class CompanyAdd extends Component {
     constructor(props) {
         super(props);
@@ -14,19 +14,20 @@ class CompanyAdd extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/companies/${this.props.match.params.id}/editdata`).then(res => {
-            this.setState({company:res.data.data});
+        dataService.sendRequest(`/api/companies/${this.props.match.params.id}`).then(res => {
+            this.setState({company:res.data});
         });
     }
 
     HandleOnSubmit(event) {
+        alert('s');
         event.preventDefault();
         let form = document.forms.namedItem("ads");
-        let formData = new FormData(form);
-        sendRequest(
-                `/api/companies/${this.props.match.params.id}/update`,
-                "POST",
-                formData
+        let formData = new FormData(form); 
+        dataService.sendRequest(
+                `/api/companies/${this.props.match.params.id}`,
+                'PUT',
+                {name:'h'}
             )
             .then(response => {
                 this.setState({
@@ -37,6 +38,7 @@ class CompanyAdd extends Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <React.Fragment>
                 <form

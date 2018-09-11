@@ -15,8 +15,9 @@ class CompanyAdd extends Component {
         event.preventDefault();
         let form = document.forms.namedItem("ads");
         let formData = new FormData(form);
-        sendRequest("/api/companies/store", "POST", formData).then(
+        sendRequest("/api/companies", "POST", formData).then(
             response => {
+                console.log(response);
                 this.setState({
                     msg: response.data.msg,
                     msgClass: "text-success"

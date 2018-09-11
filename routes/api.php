@@ -40,8 +40,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 // });
 
-Route::group(['middleware' => ['api', 'jwt.auth']], function() {
-    Route::resource('api/companies', 'Api\CompaniesController')->except('show','create','edit');
+Route::group(['middleware' => ['api']], function() {
+    Route::resource('companies', 'Api\CompaniesController');
 });
 
 Route::post('/login', 'Api\LoginController@login');

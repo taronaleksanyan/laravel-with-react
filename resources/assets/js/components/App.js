@@ -47,7 +47,7 @@ export default class App extends Component {
                             <Route exact path="/" component={Home} />
                             <PrivateRoute
                                 exact
-                                path="/companies/"
+                                path="/companies"
                                 isAuth={this.state.isAuth}
                                 component={Companies}
                             />
