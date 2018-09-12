@@ -6,39 +6,71 @@ class CompanyAdd extends Component {
         super(props);
         this.state = {
             msg: "Create new Company",
-            msgClass: "text-primary"
+            msgClass: "text-primary",
+            newCompany: {}
         };
-        this.HandleOnSubmit = this.HandleOnSubmit.bind(this);
+        this.inputFile = React.createRef();
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange(e) {
+        let newCompany = this.state.newCompany;
+        newCompany[e.target.name] = e.target.value;
+        this.setState({
+            newCompany: newCompany
+        });
     }
 
-    HandleOnSubmit(event) {
+    handleSubmit(event) {
         event.preventDefault();
-        let form = document.forms.namedItem("ads");
-        let formData = new FormData(form);
-        sendRequest("/api/companies", "POST", formData).then(
-            response => {
-                console.log(response);
+        let logo = this.inputFile.current.files[0];
+        let formData = new FormData();
+        formData.append("logo", logo);
+        sendRequest("/api/file", "POST", formData, true, {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data"
+        }).then(response => {
+            let result = this.state.newCompany;
+            result["logo"] = response.data.path;
+            console.log("result of logo ", result);
+            sendRequest("/api/companies", "POST", result).then(res => {
                 this.setState({
-                    msg: response.data.msg,
+                    msg: "Company created successfully",
                     msgClass: "text-success"
                 });
-            }
-        );
+                console.log("company created", res);
+            });
+        });
     }
 
     render() {
         return (
             <React.Fragment>
                 <form
-                    onSubmit={this.HandleOnSubmit}
+                    onSubmit={this.handleSubmit}
                     name="ads"
                     className="container mt-5"
                 >
                     <h2 className={this.state.msgClass}>{this.state.msg}</h2>
-                    <input name="name" placeholder="Name" type="text" />
-                    <input name="email" type="email" placeholder="E-MAIL" />
+                    <input
+                        name="name"
+                        placeholder="Name"
+                        type="text"
+                        onChange={this.handleChange}
+                    />
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="E-MAIL"
+                        onChange={this.handleChange}
+                    />
                     <input name="logo" type="file" ref={this.inputFile} />
-                    <input name="website" type="url" placeholder="website" />
+                    <input
+                        name="website"
+                        type="url"
+                        placeholder="website"
+                        onChange={this.handleChange}
+                    />
                     <button type="submit">Add</button>
                 </form>
             </React.Fragment>

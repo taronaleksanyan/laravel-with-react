@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Company;
-use Illuminate\Http\File;
 use App\Http\Requests\CompanyRequest;
-use Illuminate\Support\Facades\Storage;
+
 
 class CompaniesController extends Controller
 {
@@ -42,15 +41,11 @@ class CompaniesController extends Controller
      */
     public function store(CompanyRequest $request, Company $model)
     {
-        dd(1);
             $company = $request->all();
             $model->name = $company['name'];
             $model->email = $company['email'];
             $model->website = $company['website'];
-            $path = $request['logo'];
-            $path = Storage::putFile('public', new File($path));
-            $model->logo = $path;
-
+            $model->logo = $company['logo'];
             if($model->save()) {
                 $msg = 'Company created successfully';
                 $status = 200;
@@ -91,30 +86,17 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $model)
+    public function update(Request $request, $id)
     {
-        dd($request->all());
-
+        $model = Company::find($id);
         $company = $request->all();
         $model->name = $company['name'];
         $model->email = $company['email'];
         $model->website = $company['website'];
         
-        if($request['logo']) {
-            $path = $request['logo'];
-            $path = Storage::putFile('public', new File($path));
-            $model->logo = $path;
-        }
+        $model->save();
 
-        if($model->save()) {
-            $msg = 'Company edited successfully';
-            $status = 200;
-        } else {
-            $msg = 'something went wrong';
-            $status = 500;
-        }
-
-        return response()->json(['msg' => $msg], $status);
+        return response()->json(['msg' => 'ok']);
     }
 
     /**

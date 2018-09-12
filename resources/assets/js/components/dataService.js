@@ -4,8 +4,7 @@ let defaultHeader = {
     Authorization: `Bearer ${localStorage.getItem("token")}`
 };
 
-let expObj = {
-    sendRequest: function (
+  export default function  sendRequest(
         url,
         method = "get",
         data,
@@ -22,13 +21,9 @@ let expObj = {
         if (headers !== undefined && withHeaders === true) {
             obj["headers"] = headers;
         }
+        console.log('dataService',obj);
         return axios(obj);
-    },
-    edit:  function (url,data) {
-        alert('edit');
-        return axios.put(url, data);
     }
     
-};
 
-export default expObj;
+
