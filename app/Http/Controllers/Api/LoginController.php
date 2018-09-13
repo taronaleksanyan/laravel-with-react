@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Validator;
 use JWTFactory;
 use JWTAuth;
@@ -13,16 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password'=> 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
+        
         $credentials = $request->only('email', 'password');
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
