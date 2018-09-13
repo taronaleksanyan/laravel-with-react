@@ -65,7 +65,7 @@ export default class App extends Component {
                             />
                             <PrivateRoute
                                 exact
-                                path="/employees/paginate/:p"
+                                path="/employees/"
                                 isAuth={this.state.isAuth}
                                 component={Employees}
                             />

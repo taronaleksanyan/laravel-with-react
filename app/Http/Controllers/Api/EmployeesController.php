@@ -4,66 +4,100 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CompaniesCollection;
-use App\Employees;
+use App\Employe;
+use App\Http\Requests\EmployeRequest;
+
 class EmployeesController extends Controller
 {
-    public function index() 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
-        return new CompaniesCollection(Employees::all());
+        if( $request->query('page') ) {
+            return Employe::paginate(1);
+        }
+        return Employe::all();
     }
 
-    public function create(Request $request) 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $model = new Employees();
-        $employe = $request->all();
-        $model->firstName = $employe['firstName'];
-        $model->lastName = $employe['lastName'];
-        $model->email = $employe['email'];
-        $model->company = $employe['company'];        
-        $model->phone = $employe['phone'];
-        if($model->save() ) {
-            return 'Employe Created successfully';   
-        };
-        return 'something went wrong'; 
+        //
     }
 
-    public function edit(Request $request, $id) 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  App\Http\Requests\EmployeRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(EmployeRequest $request, Employe $employe )
     {
-        $employe = Employees::find($id);
-        return response()->json([
-            'data' => $employe
-        ]);
-    }
-    public function update(Request $request, $id) 
-    {
-        
-        $result = $request->all();
-        $model = Employees::find($id);
-        $employe = $request->all();
-        $model->firstName = $employe['firstName'];
-        $model->lastName = $employe['lastName'];
-        $model->email = $employe['email'];
-        $model->company = $employe['company'];        
-        $model->phone = $employe['phone'];
-        if($model->save() ) {
-            return 'Employe Updated successfully';   
-        };
-        return 'something went wrong'; 
+       
+        $employe->first_name = $request['first_name'];
+        $employe->last_name = $request['last_name'];
+        $employe->email = $request['email'];
+        $employe->company = $request['company'];        
+        $employe->phone = $request['phone'];
+        $employe->save();
     }
 
-    public function delete(Request $request, $id) 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-       $employe = new Employees(); 
-       $employe->destroy($id); 
-       return $id;
-        
-        
+        return Employe::find($id);
     }
 
-    public function paginate() 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        $employees = Employees::paginate(10);
-        return response()->json($employees);
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  App\Http\Requests\EmployeRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(EmployeRequest $request, $id)
+    {
+        $employe = Employe::find($id);
+        $employe->first_name = $request['first_name'];
+        $employe->last_name = $request['last_name'];
+        $employe->email = $request['email'];
+        $employe->company = $request['company'];        
+        $employe->phone = $request['phone'];
+        $employe->save();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        Employe::destroy($id);
+        return $id;
     }
 }

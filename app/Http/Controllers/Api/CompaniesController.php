@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Company;
 use App\Http\Requests\CompanyRequest;
+use Illuminate\Support\Facades\Storage;
 
 
 class CompaniesController extends Controller
@@ -36,31 +37,24 @@ class CompaniesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\CompanyRequest  $request
+     * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyRequest $request, Company $model)
+    public function store(CompanyRequest $request, Company $company)
     {
-            $company = $request->all();
-            $model->name = $company['name'];
-            $model->email = $company['email'];
-            $model->website = $company['website'];
-            $model->logo = $company['logo'];
-            if($model->save()) {
-                $msg = 'Company created successfully';
-                $status = 200;
-            } else {
-                $msg = 'something went wrong';
-                $status = 500;
-            }
+            $company->name = $request['name'];
+            $company->email = $request['email'];
+            $company->website = $request['website'];
+            $company->logo = $request['logo'];
+            $company->save();
 
-            return response()->json(['msg' => $msg], $status);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  App\Company
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
@@ -82,34 +76,34 @@ class CompaniesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Http\Requests\CompanyRequest  $request
+     * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CompanyRequest $request, Company $company)
     {
-        $model = Company::find($id);
-        $company = $request->all();
-        $model->name = $company['name'];
-        $model->email = $company['email'];
-        $model->website = $company['website'];
-        
-        $model->save();
-
-        return response()->json(['msg' => 'ok']);
+        $company->name = $request['name'];
+        $company->email = $request['email'];
+        $company->website = $request['website'];
+        if($company->logo !== $request['logo'] ) {
+            Storage::delete($request->logo);
+            $company->logo = $request['logo'];
+        }
+        $company->save();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  App\Company
+     * @return App\Company
      */
     public function destroy(Company $company)
     {
-        if($company->delete()) {
-            return response()->json('company deleted');
-        }
+        Storage::delete($company->logo);
+        $company->delete();
+        return $company;
+        
         
 
     }

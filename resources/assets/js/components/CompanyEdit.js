@@ -14,14 +14,15 @@ class CompanyAdd extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+
     handleChange(e) {
-        console.log('ev target',e.target);
         let newCompany = this.state.company;
         newCompany[e.target.name] = e.target.value;
         this.setState({
             company: newCompany
         });
     }
+
     componentDidMount() {
         sendRequest(`/api/companies/${this.props.match.params.id}`).then(res => {
             this.setState({company:res.data});
@@ -29,12 +30,14 @@ class CompanyAdd extends Component {
     }
 
     handleSubmit(event) {
+
         event.preventDefault();
         let logo = this.inputFile.current.files[0];
         let formData = new FormData();
         formData.append("logo", logo);
         if(!logo) {
             let result = this.state.company;
+
             sendRequest(`/api/companies/${this.props.match.params.id}`, "PUT", result).then(res => {
                 this.setState({
                     msg: "Company edited successfully",
@@ -42,21 +45,25 @@ class CompanyAdd extends Component {
                 });
                 console.log("company created", res);
             });
+
             return;
         }
         sendRequest("/api/file", "POST", formData, true, {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data"
         }).then(response => {
-            let result = this.state.newCompany;
+            let result = this.state.company;
             result["logo"] = response.data.path;
-            console.log("result of logo ", result);
-            sendRequest("/api/companies", "POST", result).then(res => {
+            sendRequest(`/api/companies/${this.props.match.params.id}`, "PUT", result).then(res => {
                 this.setState({
-                    msg: "Company created successfully",
+                    msg: "Company edited successfully",
                     msgClass: "text-success"
                 });
-                console.log("company created", res);
+            }).catch(err => {
+                this.setState({
+                    msg: "Fill all fields correctly",
+                    msgClass: "text-danger"
+                }); 
             });
         });
         

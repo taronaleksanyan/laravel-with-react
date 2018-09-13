@@ -9,7 +9,7 @@ class Company extends Component {
     }
 
     handleDeleteClick() {
-        let deleteUrl = `/api/companies/${this.props.id}/delete`;
+        let deleteUrl = `/api/companies/${this.props.id}`;
         this.props.del(deleteUrl);
     }
     render() {

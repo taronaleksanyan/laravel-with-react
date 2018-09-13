@@ -38233,7 +38233,7 @@ var App = function (_Component) {
                             }),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__PrivateRoute__["a" /* default */], {
                                 exact: true,
-                                path: "/employees/paginate/:p",
+                                path: "/employees/",
                                 isAuth: this.state.isAuth,
                                 component: __WEBPACK_IMPORTED_MODULE_9__Employees__["a" /* default */]
                             }),
@@ -60807,8 +60807,10 @@ var Companies = function (_Component) {
             Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])(url, "delete").then(function (res) {
                 var arr = _this3.state.companies;
                 arr = arr.filter(function (value) {
-                    return value.id !== res.data;
+
+                    return value.id !== res.data.id;
                 });
+
                 _this3.setState({
                     companies: arr
                 });
@@ -60934,7 +60936,7 @@ var Company = function (_Component) {
     _createClass(Company, [{
         key: "handleDeleteClick",
         value: function handleDeleteClick() {
-            var deleteUrl = "/api/companies/" + this.props.id + "/delete";
+            var deleteUrl = "/api/companies/" + this.props.id;
             this.props.del(deleteUrl);
         }
     }, {
@@ -61042,13 +61044,16 @@ var CompanyAdd = function (_Component) {
             }).then(function (response) {
                 var result = _this2.state.newCompany;
                 result["logo"] = response.data.path;
-                console.log("result of logo ", result);
                 Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies", "POST", result).then(function (res) {
                     _this2.setState({
                         msg: "Company created successfully",
                         msgClass: "text-success"
                     });
-                    console.log("company created", res);
+                }).catch(function (err) {
+                    _this2.setState({
+                        msg: "Fill all fields correctly",
+                        msgClass: "text-danger"
+                    });
                 });
             });
         }
@@ -61148,7 +61153,6 @@ var CompanyAdd = function (_Component) {
     _createClass(CompanyAdd, [{
         key: "handleChange",
         value: function handleChange(e) {
-            console.log('ev target', e.target);
             var newCompany = this.state.company;
             newCompany[e.target.name] = e.target.value;
             this.setState({
@@ -61175,6 +61179,7 @@ var CompanyAdd = function (_Component) {
             formData.append("logo", logo);
             if (!logo) {
                 var result = this.state.company;
+
                 Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/" + this.props.match.params.id, "PUT", result).then(function (res) {
                     _this3.setState({
                         msg: "Company edited successfully",
@@ -61182,21 +61187,25 @@ var CompanyAdd = function (_Component) {
                     });
                     console.log("company created", res);
                 });
+
                 return;
             }
             Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/file", "POST", formData, true, {
                 Authorization: "Bearer " + localStorage.getItem("token"),
                 "Content-Type": "multipart/form-data"
             }).then(function (response) {
-                var result = _this3.state.newCompany;
+                var result = _this3.state.company;
                 result["logo"] = response.data.path;
-                console.log("result of logo ", result);
-                Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies", "POST", result).then(function (res) {
+                Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/" + _this3.props.match.params.id, "PUT", result).then(function (res) {
                     _this3.setState({
-                        msg: "Company created successfully",
+                        msg: "Company edited successfully",
                         msgClass: "text-success"
                     });
-                    console.log("company created", res);
+                }).catch(function (err) {
+                    _this3.setState({
+                        msg: "Fill all fields correctly",
+                        msgClass: "text-danger"
+                    });
                 });
             });
         }
@@ -61304,8 +61313,7 @@ var Employees = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/employees/paginate?page=" + this.state.page).then(function (res) {
-                console.log(res);
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/employees?page=1").then(function (res) {
 
                 _this2.setState({
                     employees: res.data.data,
@@ -61334,7 +61342,7 @@ var Employees = function (_Component) {
             var _this4 = this;
 
             var page = event.target.innerHTML;
-            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/employees/paginate?page=" + page).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])("/api/employees?page=" + page).then(function (res) {
                 _this4.setState({
                     employees: res.data.data,
                     last: res.data.last_page,
@@ -61369,7 +61377,7 @@ var Employees = function (_Component) {
                     {
                         className: "btn btn-default",
                         key: i + "01001000",
-                        to: "/employees/paginate/" + (i + 1),
+                        to: "/employees/?page=" + (i + 1),
                         onClick: _this5.next
                     },
                     value
@@ -61447,7 +61455,7 @@ var Employe = function (_Component) {
     _createClass(Employe, [{
         key: "handleDeleteClick",
         value: function handleDeleteClick() {
-            var deleteUrl = "/api/employees/" + this.props.id + "/delete";
+            var deleteUrl = "/api/employees/" + this.props.id;
             this.props.del(deleteUrl);
         }
     }, {
@@ -61523,10 +61531,11 @@ var EmployeAdd = function (_Component) {
         _this.state = {
             msg: "Create new Employe",
             msgClass: "text-primary",
-            Employe: {},
+            employe: {},
             companies: []
         };
         _this.HandleOnSubmit = _this.HandleOnSubmit.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
         return _this;
     }
 
@@ -61535,10 +61544,19 @@ var EmployeAdd = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/all").then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies").then(function (res) {
                 _this2.setState({
-                    companies: res.data.data
+                    companies: res.data
                 });
+            });
+        }
+    }, {
+        key: "handleChange",
+        value: function handleChange(e) {
+            var newEmploye = this.state.employe;
+            newEmploye[e.target.name] = e.target.value;
+            this.setState({
+                employe: newEmploye
             });
         }
     }, {
@@ -61547,11 +61565,10 @@ var EmployeAdd = function (_Component) {
             var _this3 = this;
 
             event.preventDefault();
-            var form = document.forms.namedItem("ads");
-            var formData = new FormData(form);
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees/create", "POST", formData).then(function (response) {
+
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees", "POST", this.state.employe).then(function (response) {
                 _this3.setState({
-                    msg: response.data,
+                    msg: "Employe Created successfully",
                     msgClass: "text-success"
                 });
             });
@@ -61578,30 +61595,28 @@ var EmployeAdd = function (_Component) {
                         name: "first_name",
                         placeholder: "First name",
                         type: "text",
-                        defaultValue: this.state.Employe.firstName
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
                         name: "last_name",
                         type: "text",
                         placeholder: "Last name",
-                        defaultValue: this.state.Employe.lastName
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
                         name: "email",
                         type: "email",
                         placeholder: "E-MAIL",
-                        defaultValue: this.state.Employe.email
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "select",
-                        { name: "company" },
+                        { onChange: this.handleChange, name: "company" },
                         this.state.companies.map(function (value) {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 "option",
                                 { key: value.id, value: value.id },
-                                " ",
-                                value.name,
-                                " "
+                                value.name
                             );
                         })
                     ),
@@ -61609,7 +61624,7 @@ var EmployeAdd = function (_Component) {
                         name: "phone",
                         type: "text",
                         placeholder: "Phone",
-                        defaultValue: this.state.Employe.phone
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "button",
@@ -61659,10 +61674,11 @@ var EmployeEdit = function (_Component) {
         _this.state = {
             msg: "Edit Employe",
             msgClass: "text-warning",
-            Employe: {},
+            employe: {},
             companies: []
         };
         _this.HandleOnSubmit = _this.HandleOnSubmit.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
         return _this;
     }
 
@@ -61671,16 +61687,26 @@ var EmployeEdit = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees/" + this.props.match.params.id + "/editdata").then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees/" + this.props.match.params.id).then(function (res) {
+                console.log(res.data);
                 _this2.setState({
-                    Employe: res.data.data
+                    employe: res.data
                 });
             });
 
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/all").then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/companies/").then(function (res) {
                 _this2.setState({
-                    companies: res.data.data
+                    companies: res.data
                 });
+            });
+        }
+    }, {
+        key: "handleChange",
+        value: function handleChange(e) {
+            var newEmploye = this.state.employe;
+            newEmploye[e.target.name] = e.target.value;
+            this.setState({
+                employe: newEmploye
             });
         }
     }, {
@@ -61689,12 +61715,15 @@ var EmployeEdit = function (_Component) {
             var _this3 = this;
 
             event.preventDefault();
-            var form = document.forms.namedItem("ads");
-            var formData = new FormData(form);
-            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees/" + this.props.match.params.id + "/update", "POST", formData).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_2__dataService__["a" /* default */])("/api/employees/" + this.props.match.params.id, "PUT", this.state.employe).then(function (response) {
                 _this3.setState({
-                    msg: response.data,
+                    msg: 'Employe edited successfully',
                     msgClass: "text-success"
+                });
+            }).catch(function (err) {
+                _this3.setState({
+                    msg: 'fill all fields correctly',
+                    msgClass: "text-danger"
                 });
             });
         }
@@ -61722,25 +61751,28 @@ var EmployeEdit = function (_Component) {
                         name: "first_name",
                         placeholder: "First name",
                         type: "text",
-                        defaultValue: this.state.Employe.firstName
+                        defaultValue: this.state.employe.first_name,
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
                         name: "last_name",
                         type: "text",
                         placeholder: "Last name",
-                        defaultValue: this.state.Employe.lastName
+                        onChange: this.handleChange,
+                        defaultValue: this.state.employe.last_name
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
                         name: "email",
                         type: "email",
                         placeholder: "E-MAIL",
-                        defaultValue: this.state.Employe.email
+                        onChange: this.handleChange,
+                        defaultValue: this.state.employe.email
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "select",
-                        { name: "company" },
+                        { onChange: this.handleChange, name: "company" },
                         this.state.companies.map(function (value) {
-                            if (value.id === _this4.state.Employe.company) return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            if (value.id === _this4.state.employe.company) return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 "option",
                                 {
                                     selected: "selected",
@@ -61764,7 +61796,8 @@ var EmployeEdit = function (_Component) {
                         name: "phone",
                         type: "text",
                         placeholder: "Phone",
-                        defaultValue: this.state.Employe.phone
+                        defaultValue: this.state.employe.phone,
+                        onChange: this.handleChange
                     }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "button",

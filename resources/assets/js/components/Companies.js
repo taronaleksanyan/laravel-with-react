@@ -30,8 +30,10 @@ class Companies extends Component {
         sendRequest(url, "delete").then(res => {
             let arr = this.state.companies;
             arr = arr.filter(value => {
-                return value.id !== res.data;
+
+                return value.id !== res.data.id;
             });
+
             this.setState({
                 companies: arr
             });

@@ -19,9 +19,8 @@ class Employees extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/employees/paginate?page=${this.state.page}`).then(
+        sendRequest(`/api/employees?page=1`).then(
             res => {
-                console.log(res);
 
                 this.setState({
                     employees: res.data.data,
@@ -44,7 +43,7 @@ class Employees extends Component {
 
     next(event) {
         let page = event.target.innerHTML;
-        sendRequest(`/api/employees/paginate?page=${page}`).then(res => {
+        sendRequest(`/api/employees?page=${page}`).then(res => {
             this.setState({
                 employees: res.data.data,
                 last: res.data.last_page,
@@ -77,7 +76,7 @@ class Employees extends Component {
                 <Link
                     className="btn btn-default"
                     key={i + "01001000"}
-                    to={`/employees/paginate/${i + 1}`}
+                    to={`/employees/?page=${i + 1}`}
                     onClick={this.next}
                 >
                     {value}

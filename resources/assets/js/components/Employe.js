@@ -9,7 +9,7 @@ class Employe extends Component {
     }
 
     handleDeleteClick() {
-        let deleteUrl = `/api/employees/${this.props.id}/delete`;
+        let deleteUrl = `/api/employees/${this.props.id}`;
         this.props.del(deleteUrl);
     }
     render() {

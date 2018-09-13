@@ -8,40 +8,53 @@ class EmployeEdit extends Component {
         this.state = {
             msg: "Edit Employe",
             msgClass: "text-warning",
-            Employe: {},
+            employe: {},
             companies: []
         };
         this.HandleOnSubmit = this.HandleOnSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
         sendRequest(
-            `/api/employees/${this.props.match.params.id}/editdata`
+            `/api/employees/${this.props.match.params.id}`
         ).then(res => {
+            console.log(res.data);
             this.setState({
-                Employe: res.data.data
+                employe: res.data
             });
         });
 
-        sendRequest("/api/companies/all").then(res => {
+        sendRequest("/api/companies/").then(res => {
             this.setState({
-                companies: res.data.data
+                companies: res.data
             });
+        });
+    }
+
+    handleChange(e) {
+        let newEmploye = this.state.employe;
+        newEmploye[e.target.name] = e.target.value;
+        this.setState({
+            employe:newEmploye
         });
     }
 
     HandleOnSubmit(event) {
         event.preventDefault();
-        let form = document.forms.namedItem("ads");
-        let formData = new FormData(form);
         sendRequest(
-            `/api/employees/${this.props.match.params.id}/update`,
-            "POST",
-            formData
+            `/api/employees/${this.props.match.params.id}`,
+            "PUT",
+            this.state.employe
         ).then(response => {
             this.setState({
-                msg: response.data,
+                msg: 'Employe edited successfully',
                 msgClass: "text-success"
+            });
+        }).catch(err => {
+            this.setState({
+                msg: 'fill all fields correctly',
+                msgClass: "text-danger"
             });
         });
     }
@@ -59,23 +72,27 @@ class EmployeEdit extends Component {
                         name="first_name"
                         placeholder="First name"
                         type="text"
-                        defaultValue={this.state.Employe.firstName}
+                        defaultValue={this.state.employe.first_name}
+                        onChange = {this.handleChange}
                     />
                     <input
                         name="last_name"
                         type="text"
                         placeholder="Last name"
-                        defaultValue={this.state.Employe.lastName}
+                        onChange = {this.handleChange}                        
+                        defaultValue={this.state.employe.last_name}
                     />
                     <input
                         name="email"
                         type="email"
                         placeholder="E-MAIL"
-                        defaultValue={this.state.Employe.email}
+                        onChange = {this.handleChange}                        
+                        defaultValue={this.state.employe.email}
                     />
-                    <select name="company">
+                        
+                    <select onChange = {this.handleChange} name="company"  >
                         {this.state.companies.map(value => {
-                            if (value.id === this.state.Employe.company)
+                            if (value.id === this.state.employe.company)
                                 return (
                                     <option
                                         selected="selected"
@@ -98,7 +115,8 @@ class EmployeEdit extends Component {
                         name="phone"
                         type="text"
                         placeholder="Phone"
-                        defaultValue={this.state.Employe.phone}
+                        defaultValue={this.state.employe.phone}
+                        onChange = {this.handleChange}
                     />
                     <button type="submit">Edit</button>
                 </form>

@@ -42,6 +42,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['api']], function() {
     Route::resource('companies', 'Api\CompaniesController');
+    Route::resource('employees', 'Api\EmployeesController');
     Route::post('/file', 'Api\FileController@store');
 });
 

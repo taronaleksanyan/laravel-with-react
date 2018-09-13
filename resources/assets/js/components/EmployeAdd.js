@@ -7,28 +7,36 @@ class EmployeAdd extends Component {
         this.state = {
             msg: "Create new Employe",
             msgClass: "text-primary",
-            Employe: {},
+            employe: {},
             companies: []
         };
         this.HandleOnSubmit = this.HandleOnSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
-        sendRequest("/api/companies/all").then(res => {
+        sendRequest("/api/companies").then(res => {
             this.setState({
-                companies: res.data.data
+                companies: res.data
             });
+        });
+    }
+
+    handleChange(e) {
+        let newEmploye = this.state.employe;
+        newEmploye[e.target.name] = e.target.value;
+        this.setState({
+            employe:newEmploye
         });
     }
 
     HandleOnSubmit(event) {
         event.preventDefault();
-        let form = document.forms.namedItem("ads");
-        let formData = new FormData(form);
-        sendRequest(`/api/employees/create`, "POST", formData).then(
+
+        sendRequest(`/api/employees`, "POST", this.state.employe).then(
             response => {
                 this.setState({
-                    msg: response.data,
+                    msg: "Employe Created successfully",
                     msgClass: "text-success"
                 });
             }
@@ -48,26 +56,25 @@ class EmployeAdd extends Component {
                         name="first_name"
                         placeholder="First name"
                         type="text"
-                        defaultValue={this.state.Employe.firstName}
+                        onChange = {this.handleChange}                        
                     />
                     <input
                         name="last_name"
                         type="text"
                         placeholder="Last name"
-                        defaultValue={this.state.Employe.lastName}
+                        onChange = {this.handleChange}                        
                     />
                     <input
                         name="email"
                         type="email"
                         placeholder="E-MAIL"
-                        defaultValue={this.state.Employe.email}
+                        onChange = {this.handleChange}                        
                     />
-                    <select name="company">
+                    <select onChange = {this.handleChange}   name="company">
                         {this.state.companies.map(value => {
                             return (
                                 <option key={value.id} value={value.id}>
-                                    {" "}
-                                    {value.name}{" "}
+                                    {value.name}
                                 </option>
                             );
                         })}
@@ -76,7 +83,7 @@ class EmployeAdd extends Component {
                         name="phone"
                         type="text"
                         placeholder="Phone"
-                        defaultValue={this.state.Employe.phone}
+                        onChange = {this.handleChange}                        
                     />
                     <button type="submit">Add</button>
                 </form>

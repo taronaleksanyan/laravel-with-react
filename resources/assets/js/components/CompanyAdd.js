@@ -32,13 +32,16 @@ class CompanyAdd extends Component {
         }).then(response => {
             let result = this.state.newCompany;
             result["logo"] = response.data.path;
-            console.log("result of logo ", result);
             sendRequest("/api/companies", "POST", result).then(res => {
                 this.setState({
                     msg: "Company created successfully",
                     msgClass: "text-success"
                 });
-                console.log("company created", res);
+            }).catch(err => {
+                this.setState({
+                    msg: "Fill all fields correctly",
+                    msgClass: "text-danger"
+                });
             });
         });
     }
