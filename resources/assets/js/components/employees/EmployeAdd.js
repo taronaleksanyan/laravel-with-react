@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Nav from "./Nav";
-import sendRequest from "./dataService";
+import sendRequest from "../dataService";
+
 class EmployeAdd extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +26,7 @@ class EmployeAdd extends Component {
         let newEmploye = this.state.employe;
         newEmploye[e.target.name] = e.target.value;
         this.setState({
-            employe:newEmploye
+            employe: newEmploye
         });
     }
 
@@ -56,21 +56,21 @@ class EmployeAdd extends Component {
                         name="first_name"
                         placeholder="First name"
                         type="text"
-                        onChange = {this.handleChange}                        
+                        onChange={this.handleChange}
                     />
                     <input
                         name="last_name"
                         type="text"
                         placeholder="Last name"
-                        onChange = {this.handleChange}                        
+                        onChange={this.handleChange}
                     />
                     <input
                         name="email"
                         type="email"
                         placeholder="E-MAIL"
-                        onChange = {this.handleChange}                        
+                        onChange={this.handleChange}
                     />
-                    <select onChange = {this.handleChange}   name="company">
+                    <select onChange={this.handleChange} name="company">
                         {this.state.companies.map(value => {
                             return (
                                 <option key={value.id} value={value.id}>
@@ -83,7 +83,7 @@ class EmployeAdd extends Component {
                         name="phone"
                         type="text"
                         placeholder="Phone"
-                        onChange = {this.handleChange}                        
+                        onChange={this.handleChange}
                     />
                     <button type="submit">Add</button>
                 </form>

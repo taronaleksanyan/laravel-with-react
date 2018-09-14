@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Employe;
 use App\Http\Requests\EmployeRequest;
 
-class EmployeesController extends Controller
+class EmployeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -81,11 +81,7 @@ class EmployeesController extends Controller
     public function update(EmployeRequest $request, $id)
     {
         $employe = Employe::find($id);
-        $employe->first_name = $request['first_name'];
-        $employe->last_name = $request['last_name'];
-        $employe->email = $request['email'];
-        $employe->company = $request['company'];        
-        $employe->phone = $request['phone'];
+        $employe->update($request->all());
         $employe->save();
     }
 

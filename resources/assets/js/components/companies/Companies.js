@@ -1,21 +1,19 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Company from "./Company";
 
-import Nav from "./Nav";
-import sendRequest from "./dataService";
+import Company from "./Company";
+import PaginateButton from "../PaginateButton";
+
+import sendRequest from "../dataService";
 
 class Companies extends Component {
     constructor(props) {
         super(props);
-        let currentPage = this.props.match.params.p;
         this.state = {
-            companies: [],
-            page: currentPage,
-            last: 1
+            companies: []
         };
         this.deleteCompany = this.deleteCompany.bind(this);
-        this.next = this.next.bind(this);
+        this.nextPage = this.nextPage.bind(this);
     }
 
     componentDidMount() {
@@ -26,21 +24,22 @@ class Companies extends Component {
             });
         });
     }
-    deleteCompany(url) {
-        sendRequest(url, "delete").then(res => {
-            let arr = this.state.companies;
-            arr = arr.filter(value => {
 
-                return value.id !== res.data.id;
+    deleteCompany(id) {
+        let url = `/api/companies/${id}`;
+        sendRequest(url, "delete").then(res => {
+            let companies = this.state.companies;
+            companies = companies.filter(company => {
+                return company.id !== res.data.id;
             });
 
             this.setState({
-                companies: arr
+                companies: companies
             });
         });
     }
 
-    next(event) {
+    nextPage(event) {
         let page = event.target.innerHTML;
         sendRequest(`/api/companies?page=${page}`).then(res => {
             this.setState({
@@ -50,51 +49,48 @@ class Companies extends Component {
         });
     }
 
-    render() {
+    getCompanies() {
+        let companies = this.state.companies;
         let result;
-        
-        if(this.state.companies !== undefined){
-             result = this.state.companies.map((value, i) => {
+
+        if (companies) {
+            result = companies.map((value, i) => {
                 return (
                     <Company
                         name={value.name}
                         key={value.id}
                         id={value.id}
-                        del={this.deleteCompany}
+                        delete={this.deleteCompany}
                     />
                 );
             });
         } else {
-            result = 'no companies found';
+            result = "no companies found";
         }
-        
-        let buttons = [];
-        for (let i = 1; i <= this.state.last; i++) {
-            buttons.push(i);
-        }
-        buttons = buttons.map((value, i) => {
-            return (
-                <Link
-                    className="btn btn-default"
-                    key={i + "0000"}
-                    to={`/companies?page=${i + 1}`}
-                    onClick={this.next}
-                >
-                    {value}
-                </Link>
-            );
-        });
+        return result;
+    }
+
+    render() {
+        let companiesResult = this.getCompanies();
+
         return (
             <React.Fragment>
                 <div className="container mt-5">
                     <h1>
-                        Companies{" "}
+                        Companies
                         <Link to="/companies/add" className="btn btn-success">
                             Add new
-                        </Link>{" "}
+                        </Link>
                     </h1>
-                    {result}
-                    <div className="mt-3">{buttons}</div>
+                    {companiesResult}
+
+                    {this.state.last && (
+                        <PaginateButton
+                            nextPage={this.nextPage}
+                            item="companies"
+                            count={this.state.last}
+                        />
+                    )}
                 </div>
             </React.Fragment>
         );

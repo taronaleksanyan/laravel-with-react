@@ -8,4 +8,5 @@ class Employe extends Model
 {
     protected $table = 'employees';
     public $timestamps = false;
+    protected $guarded = ['id'];
 }

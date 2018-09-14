@@ -7,19 +7,19 @@ import Nav from "./Nav";
 import Home from "./Home";
 
 //companies
-import Companies from "./Companies";
-import CompanyAdd from "./CompanyAdd";
-import CompanyEdit from "./CompanyEdit";
+import Companies from "./companies/Companies";
+import CompanyAdd from "./companies/CompanyAdd";
+import CompanyEdit from "./companies/CompanyEdit";
 
 //employees
 
-import Employees from "./Employees";
-import EmployeAdd from "./EmployeAdd";
-import EmployeEdit from "./EmployeEdit";
+import Employees from "./employees/Employees";
+import EmployeAdd from "./employees/EmployeAdd";
+import EmployeEdit from "./employees/EmployeEdit";
 
 import Login from "./Login";
-import PrivateRoute from "./PrivateRoute";
-import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./routers/PrivateRoute";
+import PublicRoute from "./routers/PublicRoute";
 
 export default class App extends Component {
     constructor(props) {
@@ -30,8 +30,6 @@ export default class App extends Component {
         this.changeAuth = this.changeAuth.bind(this);
     }
     changeAuth(auth) {
-        console.log(auth,'auth');
-        
         this.setState({ isAuth: auth });
     }
     render() {

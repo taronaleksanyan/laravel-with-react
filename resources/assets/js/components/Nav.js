@@ -6,10 +6,7 @@ class Nav extends Component {
     constructor(props) {
         super(props);
         this.hanndleLogout = this.hanndleLogout.bind(this);
-    
     }
-
-   
 
     hanndleLogout() {
         localStorage.clear();
@@ -42,18 +39,12 @@ class Nav extends Component {
                         >
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <Link
-                                        className="nav-link"
-                                        to="/companies"
-                                    >
+                                    <Link className="nav-link" to="/companies">
                                         Companies
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link
-                                        className="nav-link"
-                                        to="/employees/"
-                                    >
+                                    <Link className="nav-link" to="/employees/">
                                         Employees
                                     </Link>
                                 </li>

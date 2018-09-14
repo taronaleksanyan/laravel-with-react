@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Employe from "./Employe";
+import PaginateButton from "../PaginateButton";
 
-import Nav from "./Nav";
-import sendRequest from "./dataService";
+import sendRequest from "../dataService";
 
 class Employees extends Component {
     constructor(props) {
@@ -14,22 +14,20 @@ class Employees extends Component {
             page: currentPage,
             last: 1
         };
-        this.next = this.next.bind(this);
+        this.nextPage = this.nextPage.bind(this);
         this.deleteEmploye = this.deleteEmploye.bind(this);
     }
 
     componentDidMount() {
-        sendRequest(`/api/employees?page=1`).then(
-            res => {
-
-                this.setState({
-                    employees: res.data.data,
-                    last: res.data.last_page
-                });
-            }
-        );
+        sendRequest(`/api/employees?page=1`).then(res => {
+            this.setState({
+                employees: res.data.data,
+                last: res.data.last_page
+            });
+        });
     }
-    deleteEmploye(url) {
+    deleteEmploye(id) {
+        let url = `/api/employees/${id}`;
         sendRequest(url, "DELETE").then(res => {
             let arr = this.state.employees;
             arr = arr.filter(value => {
@@ -41,7 +39,7 @@ class Employees extends Component {
         });
     }
 
-    next(event) {
+    nextPage(event) {
         let page = event.target.innerHTML;
         sendRequest(`/api/employees?page=${page}`).then(res => {
             this.setState({
@@ -55,34 +53,29 @@ class Employees extends Component {
         });
     }
 
-    render() {
-        let employees = this.state.employees.map((value, i) => {
-            return (
-                <Employe
-                    name={value.first_name}
-                    key={value.id}
-                    id={value.id}
-                    del={this.deleteEmploye}
-                />
-            );
-        });
-
-        let buttons = [];
-        for (let i = 1; i <= this.state.last; i++) {
-            buttons.push(i);
+    getEmployees() {
+        let employees = this.state.employees;
+        let result;
+        if (employees) {
+            result = employees.map(employe => {
+                return (
+                    <Employe
+                        name={employe.first_name}
+                        key={employe.id}
+                        id={employe.id}
+                        delete={this.deleteEmploye}
+                    />
+                );
+            });
+        } else {
+            result = "Employees not found";
         }
-        buttons = buttons.map((value, i) => {
-            return (
-                <Link
-                    className="btn btn-default"
-                    key={i + "01001000"}
-                    to={`/employees/?page=${i + 1}`}
-                    onClick={this.next}
-                >
-                    {value}
-                </Link>
-            );
-        });
+
+        return result;
+    }
+
+    render() {
+        let employeesResult = this.getEmployees();
 
         return (
             <React.Fragment>
@@ -93,8 +86,14 @@ class Employees extends Component {
                             Add new
                         </Link>{" "}
                     </h1>
-                    {employees}
-                    <div className="mt-3">{buttons}</div>
+                    {employeesResult}
+                    {this.state.last && (
+                        <PaginateButton
+                            nextPage={this.nextPage}
+                            item="employees"
+                            count={this.state.last}
+                        />
+                    )}
                 </div>
             </React.Fragment>
         );

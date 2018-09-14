@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Company;
+
+use App\Http\Requests\LogoRequest;
 use App\Http\Requests\CompanyRequest;
+
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 
-class CompaniesController extends Controller
+
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -82,12 +87,11 @@ class CompaniesController extends Controller
      */
     public function update(CompanyRequest $request, Company $company)
     {
-        $company->name = $request['name'];
-        $company->email = $request['email'];
-        $company->website = $request['website'];
+
+        $company->update($request->all());
+
         if($company->logo !== $request['logo'] ) {
-            Storage::delete($request->logo);
-            $company->logo = $request['logo'];
+            Storage::delete($company->logo);
         }
         $company->save();
     }
@@ -95,7 +99,7 @@ class CompaniesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  App\Company
+     * @param  App\Http\Requests\LogoRequest
      * @return App\Company
      */
     public function destroy(Company $company)
@@ -106,5 +110,16 @@ class CompaniesController extends Controller
         
         
 
+    }
+      /**
+     * Create logo image
+     *
+     * @param  App\Company
+     * @param \Illuminate\Http\Response
+     */
+    public function createlogo(LogoRequest $request) {
+        $path = $request['logo'];
+        $path = Storage::putFile('public', new File($path));
+        return response()->json(['path' => $path]);
     }
 }

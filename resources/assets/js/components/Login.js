@@ -21,12 +21,9 @@ class Login extends Component {
             password: this.state.password
         };
         sendRequest("/api/login", "POST", data, false).then(res => {
-            console.log(res.data.token);
-            
             localStorage.setItem("token", res.data.token);
-            console.log(localStorage.getItem('token'))
+            console.log(localStorage.getItem("token"));
             this.props.changeAuth(true);
-            //window.location.href = "/companies/paginate/1";
         });
     }
 
