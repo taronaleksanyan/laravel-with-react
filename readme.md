@@ -1,6 +1,6 @@
 ## From author
 
-Hi, this is testing project. I have used Laravel PHP framework and React js. If you want to install this project follow this steps
+Hi, this is testing project. I have used Laravel PHP framework and React js. If you want to install this project follow installation steps
 
 ## Instalation 
 
