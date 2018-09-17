@@ -4,14 +4,14 @@ Hi, this is testing project. I have used Laravel PHP framework and React js. If 
 
 ## Instalation 
 
-1 Clone this repository using git clone command
-2 Run composer install command
-3 Run npm install command
-4 configure .env.example file and rename it to .env
-5 Run php artisan migrate command to create necessary tables in your database
-6 Run php artisan serve command
-7 Run npm run watch command
-8 Open http://127.0.0.1:8000/ in your browser
+- Clone this repository using git clone command and run cd laravel-with-react command
+- Run composer install command
+- Run npm install command
+- configure .env.example file and rename it to .env
+- Run php artisan migrate command to create necessary tables in your database
+- Run php artisan serve command
+- Run npm run watch command
+- Open http://127.0.0.1:8000/ in your browser
 
 
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
