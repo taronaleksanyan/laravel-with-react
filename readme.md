@@ -1,3 +1,7 @@
+## From author
+
+Hi, this is testing project. I have used Laravel PHP framework and React js. If you want to install this project you can simply clone this repository using git clone command
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
