@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import sendRequest from "../dataService";
+import sendRequest from "../../dataService";
 
 class EmployeEdit extends Component {
     constructor(props) {

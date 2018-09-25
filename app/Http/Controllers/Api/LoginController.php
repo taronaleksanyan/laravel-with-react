@@ -15,7 +15,10 @@ class LoginController extends Controller
 {
     public function login(LoginRequest $request)
     {
+        
         $credentials = $request->only('email', 'password');
+        $user = User::where(
+            'email',$credentials['email'])->get()->first();
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
@@ -23,6 +26,9 @@ class LoginController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
+        
+        $user->token = $token;
+        $user->save();
         return response()->json(compact('token'));
     }
 }

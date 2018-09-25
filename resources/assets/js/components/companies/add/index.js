@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import sendRequest from "../dataService";
+import sendRequest from "../../dataService";
 
 class CompanyAdd extends Component {
+    
     constructor(props) {
         super(props);
-        this.inputFile = React.createRef();
         this.state = {
-            msg: "Edit Company",
-            msgClass: "text-warning",
-            company: {}
+            msg: "Create new Company",
+            msgClass: "text-primary",
+            newCompany: {}
         };
         this.inputFile = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,19 +16,11 @@ class CompanyAdd extends Component {
     }
 
     handleChange(e) {
-        let newCompany = this.state.company;
+        let newCompany = this.state.newCompany;
         newCompany[e.target.name] = e.target.value;
         this.setState({
-            company: newCompany
+            newCompany: newCompany
         });
-    }
-
-    componentDidMount() {
-        sendRequest(`/api/companies/${this.props.match.params.id}`).then(
-            res => {
-                this.setState({ company: res.data });
-            }
-        );
     }
 
     handleSubmit(event) {
@@ -36,37 +28,16 @@ class CompanyAdd extends Component {
         let logo = this.inputFile.current.files[0];
         let formData = new FormData();
         formData.append("logo", logo);
-        if (!logo) {
-            let result = this.state.company;
-
-            sendRequest(
-                `/api/companies/${this.props.match.params.id}`,
-                "PUT",
-                result
-            ).then(res => {
-                this.setState({
-                    msg: "Company edited successfully",
-                    msgClass: "text-success"
-                });
-                console.log("company created", res);
-            });
-
-            return;
-        }
         sendRequest("/api/logo", "POST", formData, true, {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data"
         }).then(response => {
-            let result = this.state.company;
+            let result = this.state.newCompany;
             result["logo"] = response.data.path;
-            sendRequest(
-                `/api/companies/${this.props.match.params.id}`,
-                "PUT",
-                result
-            )
+            sendRequest("/api/companies", "POST", result)
                 .then(res => {
                     this.setState({
-                        msg: "Company edited successfully",
+                        msg: "Company created successfully",
                         msgClass: "text-success"
                     });
                 })
@@ -92,14 +63,12 @@ class CompanyAdd extends Component {
                         name="name"
                         placeholder="Name"
                         type="text"
-                        defaultValue={this.state.company.name}
                         onChange={this.handleChange}
                     />
                     <input
                         name="email"
                         type="email"
                         placeholder="E-MAIL"
-                        defaultValue={this.state.company.email}
                         onChange={this.handleChange}
                     />
                     <input name="logo" type="file" ref={this.inputFile} />
@@ -107,9 +76,9 @@ class CompanyAdd extends Component {
                         name="website"
                         type="url"
                         placeholder="website"
-                        defaultValue={this.state.company.website}
+                        onChange={this.handleChange}
                     />
-                    <button type="submit">Edit</button>
+                    <button type="submit">Add</button>
                 </form>
             </React.Fragment>
         );

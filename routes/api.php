@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::group(['middleware' => ['api']], function() {
+Route::group(['middleware' => ['api','jwt.auth']], function() {
     Route::resource('companies', 'Api\CompanyController');
     Route::resource('employees', 'Api\EmployeController');
     Route::post('/logo', 'Api\CompanyController@createlogo');

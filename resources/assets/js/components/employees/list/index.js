@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Employe from "./Employe";
-import PaginateButton from "../PaginateButton";
+import PaginateButton from "../../PaginateButton";
 
-import sendRequest from "../dataService";
+import sendRequest from "../../dataService";
 
 class Employees extends Component {
     constructor(props) {

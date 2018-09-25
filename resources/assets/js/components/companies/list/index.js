@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import Company from "./Company";
-import PaginateButton from "../PaginateButton";
+import PaginateButton from "../../PaginateButton";
 
-import sendRequest from "../dataService";
+import sendRequest from "../../dataService";
 
 class Companies extends Component {
     constructor(props) {

@@ -7,15 +7,15 @@ import Nav from "./Nav";
 import Home from "./Home";
 
 //companies
-import Companies from "./companies/Companies";
-import CompanyAdd from "./companies/CompanyAdd";
-import CompanyEdit from "./companies/CompanyEdit";
+import Companies from "./companies/list";
+import CompanyAdd from "./companies/add";
+import CompanyEdit from "./companies/edit";
 
 //employees
 
-import Employees from "./employees/Employees";
-import EmployeAdd from "./employees/EmployeAdd";
-import EmployeEdit from "./employees/EmployeEdit";
+import Employees from "./employees/list";
+import EmployeAdd from "./employees/add";
+import EmployeEdit from "./employees/edit";
 
 import Login from "./Login";
 import PrivateRoute from "./routers/PrivateRoute";
