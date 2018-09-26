@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Http\Resources\CompaniesCollection;
-use App\Companies;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,18 +10,16 @@ use App\Companies;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
-Route::group(['middleware' => ['api','jwt.auth']], function() {
-    Route::resource('companies', 'Api\CompanyController');
-    Route::resource('employees', 'Api\EmployeController');
-    Route::post('/logo', 'Api\CompanyController@createlogo');
+Route::group(['middleware' => ['api', 'jwt.auth']], function () {
+    Route::resource('companies', 'Api\CompaniesController')->except(['edit', 'create']);
+    Route::resource('employees', 'Api\EmployeesController')->except(['edit', 'create']);
+    Route::post('/logo', 'Api\CompaniesController@createlogo');
 });
 
 Route::post('/login', 'Api\LoginController@login');

@@ -47,6 +47,8 @@ class CompanyAdd extends Component {
                         msgClass: "text-danger"
                     });
                 });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Employe;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeRequest;
+use Illuminate\Http\Request;
 
-class EmployeController extends Controller
+class EmployeesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,20 +16,10 @@ class EmployeController extends Controller
      */
     public function index(Request $request)
     {
-        if( $request->query('page') ) {
-            return Employe::paginate(1);
+        if ($request->query('page')) {
+            return Employe::paginate($request->query('count'));
         }
         return Employe::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -38,13 +28,13 @@ class EmployeController extends Controller
      * @param  App\Http\Requests\EmployeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EmployeRequest $request, Employe $employe )
+    public function store(EmployeRequest $request, Employe $employe)
     {
-       
+
         $employe->first_name = $request['first_name'];
         $employe->last_name = $request['last_name'];
         $employe->email = $request['email'];
-        $employe->company = $request['company'];        
+        $employe->company = $request['company'];
         $employe->phone = $request['phone'];
         $employe->save();
     }
@@ -58,17 +48,6 @@ class EmployeController extends Controller
     public function show($id)
     {
         return Employe::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

@@ -20,6 +20,7 @@ import EmployeEdit from "./employees/edit";
 import Login from "./Login";
 import PrivateRoute from "./routers/PrivateRoute";
 import PublicRoute from "./routers/PublicRoute";
+import sendRequest from "./dataService";
 
 export default class App extends Component {
     constructor(props) {
@@ -29,10 +30,21 @@ export default class App extends Component {
         };
         this.changeAuth = this.changeAuth.bind(this);
     }
+    componentDidUpdate() {
+        // let token = localStorage.getItem('token');
+        //     sendRequest(`/me?token=${token}`).then(res => {
+        //         console.log(res);
+        //     }).catch(err => {
+        //         console.log(err);
+        //     });
+    }
     changeAuth(auth) {
+        if(!auth) localStorage.clear();
         this.setState({ isAuth: auth });
     }
+    
     render() {
+        console.log('app mount');
         return (
             <div>
                 <Router>
@@ -48,35 +60,41 @@ export default class App extends Component {
                                 path="/companies"
                                 isAuth={this.state.isAuth}
                                 component={Companies}
+                                changeAuth={this.changeAuth}
                             />
                             <PrivateRoute
                                 exact
                                 path="/companies/add"
                                 isAuth={this.state.isAuth}
                                 component={CompanyAdd}
+                                changeAuth={this.changeAuth}
                             />
                             <PrivateRoute
                                 exact
                                 path="/companies/:id/edit/"
                                 isAuth={this.state.isAuth}
+                                changeAuth={this.changeAuth}
                                 component={CompanyEdit}
                             />
                             <PrivateRoute
                                 exact
                                 path="/employees/"
                                 isAuth={this.state.isAuth}
+                                changeAuth={this.changeAuth}
                                 component={Employees}
                             />
                             <PrivateRoute
                                 exact
                                 path="/employees/add"
                                 isAuth={this.state.isAuth}
+                                changeAuth={this.changeAuth}
                                 component={EmployeAdd}
                             />
                             <PrivateRoute
                                 exact
                                 path="/employees/:id/edit/"
                                 isAuth={this.state.isAuth}
+                                changeAuth={this.changeAuth}
                                 component={EmployeEdit}
                             />
                             <PublicRoute

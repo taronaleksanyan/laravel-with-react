@@ -22,12 +22,16 @@ class EmployeEdit extends Component {
                     employe: res.data
                 });
             }
-        );
+        ).catch(err => {
+            this.props.changeAuth(false);
+        });
 
         sendRequest("/api/companies/").then(res => {
             this.setState({
                 companies: res.data
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 

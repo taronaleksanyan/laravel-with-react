@@ -19,11 +19,14 @@ class Employees extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/employees?page=1`).then(res => {
+        sendRequest(`/api/employees?page=1&count=10`).then(res => {
             this.setState({
                 employees: res.data.data,
                 last: res.data.last_page
             });
+        }).catch(err => {
+            console.log('eee');
+            this.props.changeAuth(false);
         });
     }
     deleteEmploye(id) {
@@ -36,6 +39,8 @@ class Employees extends Component {
             this.setState({
                 employees: arr
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 
@@ -47,6 +52,8 @@ class Employees extends Component {
                 last: res.data.last_page,
                 page: page
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
         this.setState({
             page: page

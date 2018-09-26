@@ -1,15 +1,15 @@
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
-let defaultHeader = {
-    Authorization: `Bearer ${localStorage.getItem("token")}`
-};
+// import token from './getToken';
+
 
 export default function sendRequest(
     url,
     method = "get",
     data,
     withHeaders = true,
-    headers = defaultHeader
+    headers
 ) {
     let obj = {
         method: method,
@@ -18,8 +18,27 @@ export default function sendRequest(
     if (data !== undefined && data !== {}) {
         obj["data"] = data;
     }
-    if (headers !== undefined && withHeaders === true) {
-        obj["headers"] = headers;
+    if (withHeaders) {
+        if (headers !== undefined) {
+            obj["headers"] = headers;
+        } else {
+            obj["headers"] = {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            };
+        }
     }
+
     return axios(obj);
+}
+
+function handleSuccess(response) {
+    console.log("success");
+    return { data: response.data };
+}
+
+function handleError(error) {
+    if (error.response.status == 400) {
+        logout();
+    }
+    return Promise.reject(error);
 }

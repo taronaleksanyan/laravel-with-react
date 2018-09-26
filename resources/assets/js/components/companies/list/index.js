@@ -17,11 +17,13 @@ class Companies extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/companies?page=1`).then(res => {
+        sendRequest(`/api/companies?page=1&count=10`).then(res => {
             this.setState({
                 companies: res.data.data,
                 last: res.data.last_page
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 
@@ -36,6 +38,8 @@ class Companies extends Component {
             this.setState({
                 companies: companies
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 
@@ -46,6 +50,8 @@ class Companies extends Component {
                 companies: res.data.data,
                 page: page
             });
+        }).catch(err => {
+            this.props.changeAuth(false);
         });
     }
 

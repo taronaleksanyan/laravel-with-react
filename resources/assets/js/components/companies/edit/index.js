@@ -24,11 +24,13 @@ class CompanyAdd extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/companies/${this.props.match.params.id}`).then(
+        sendRequest(`/api/companies/${this.props.match.params.id}`,this.props.changeAuth).then(
             res => {
                 this.setState({ company: res.data });
             }
-        );
+        ).catch(err => {
+            this.props.changeAuth(false);
+        });
     }
 
     handleSubmit(event) {
@@ -49,6 +51,8 @@ class CompanyAdd extends Component {
                     msgClass: "text-success"
                 });
                 console.log("company created", res);
+            }).catch(err => {
+                this.props.changeAuth(false);
             });
 
             return;

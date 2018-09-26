@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Company;
-
-use App\Http\Requests\LogoRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
-
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\LogoRequest;
 use Illuminate\Http\File;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-
-
-class CompanyController extends Controller
+class CompaniesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,20 +19,10 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->query('page')) {
-            return Company::paginate(1);
+        if ($request->query('page')) {
+            return Company::paginate($request->query('count'));
         }
         return Company::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -48,11 +34,11 @@ class CompanyController extends Controller
      */
     public function store(CompanyRequest $request, Company $company)
     {
-            $company->name = $request['name'];
-            $company->email = $request['email'];
-            $company->website = $request['website'];
-            $company->logo = $request['logo'];
-            $company->save();
+        $company->name = $request['name'];
+        $company->email = $request['email'];
+        $company->website = $request['website'];
+        $company->logo = $request['logo'];
+        $company->save();
 
     }
 
@@ -68,17 +54,6 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\CompanyRequest  $request
@@ -90,7 +65,7 @@ class CompanyController extends Controller
 
         $company->update($request->all());
 
-        if($company->logo !== $request['logo'] ) {
+        if ($company->logo !== $request['logo']) {
             Storage::delete($company->logo);
         }
         $company->save();
@@ -107,17 +82,16 @@ class CompanyController extends Controller
         Storage::delete($company->logo);
         $company->delete();
         return $company;
-        
-        
 
     }
-      /**
+    /**
      * Create logo image
      *
      * @param  App\Company
      * @param \Illuminate\Http\Response
      */
-    public function createlogo(LogoRequest $request) {
+    public function createlogo(LogoRequest $request)
+    {
         $path = $request['logo'];
         $path = Storage::putFile('public', new File($path));
         return response()->json(['path' => $path]);

@@ -22,7 +22,6 @@ class Login extends Component {
         };
         sendRequest("/api/login", "POST", data, false).then(res => {
             localStorage.setItem("token", res.data.token);
-            console.log(localStorage.getItem("token"));
             this.props.changeAuth(true);
         });
     }
