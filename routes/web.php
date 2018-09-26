@@ -12,5 +12,5 @@
  */
 
 Route::any('{all}', function () {
-    return view('welcome');
-})->where('all', '.*');
+    return view('index');
+ })->where('all', '.*');

@@ -25,6 +25,7 @@ class EmployeRequest extends FormRequest
     {
         return [
             'first_name' => 'required',
+            'email' => 'required|string|email|max:255',
             'last_name' => 'required'
         ];
     }
