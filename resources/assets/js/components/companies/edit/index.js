@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import sendRequest from "../../dataService";
 
-class CompanyAdd extends Component {
+class CompanyEdit extends Component {
     constructor(props) {
         super(props);
         this.inputFile = React.createRef();
@@ -24,12 +24,10 @@ class CompanyAdd extends Component {
     }
 
     componentDidMount() {
-        sendRequest(`/api/companies/${this.props.match.params.id}`,this.props.changeAuth).then(
-            res => {
-                this.setState({ company: res.data });
-            }
-        ).catch(err => {
-            this.props.changeAuth(false);
+        sendRequest(
+            `/api/companies/${this.props.match.params.id}`,
+        ).then(res => {
+            this.setState({ company: res.data });
         });
     }
 
@@ -51,35 +49,23 @@ class CompanyAdd extends Component {
                     msgClass: "text-success"
                 });
                 console.log("company created", res);
-            }).catch(err => {
-                this.props.changeAuth(false);
             });
 
             return;
         }
-        sendRequest("/api/logo", "POST", formData, true, {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data"
-        }).then(response => {
+        sendRequest("/api/logo", "POST", formData).then(response => {
             let result = this.state.company;
             result["logo"] = response.data.path;
             sendRequest(
                 `/api/companies/${this.props.match.params.id}`,
                 "PUT",
                 result
-            )
-                .then(res => {
-                    this.setState({
-                        msg: "Company edited successfully",
-                        msgClass: "text-success"
-                    });
-                })
-                .catch(err => {
-                    this.setState({
-                        msg: "Fill all fields correctly",
-                        msgClass: "text-danger"
-                    });
+            ).then(res => {
+                this.setState({
+                    msg: "Company edited successfully",
+                    msgClass: "text-success"
                 });
+            });
         });
     }
 
@@ -120,4 +106,4 @@ class CompanyAdd extends Component {
     }
 }
 
-export default CompanyAdd;
+export default CompanyEdit;

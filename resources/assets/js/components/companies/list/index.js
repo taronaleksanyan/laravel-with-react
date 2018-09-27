@@ -22,8 +22,6 @@ class Companies extends Component {
                 companies: res.data.data,
                 last: res.data.last_page
             });
-        }).catch(err => {
-            this.props.changeAuth(false);
         });
     }
 
@@ -32,14 +30,12 @@ class Companies extends Component {
         sendRequest(url, "delete").then(res => {
             let companies = this.state.companies;
             companies = companies.filter(company => {
-                return company.id !== res.data.id;
+                return company.id !== id;
             });
 
             this.setState({
                 companies: companies
             });
-        }).catch(err => {
-            this.props.changeAuth(false);
         });
     }
 
@@ -50,8 +46,6 @@ class Companies extends Component {
                 companies: res.data.data,
                 page: page
             });
-        }).catch(err => {
-            this.props.changeAuth(false);
         });
     }
 

@@ -19,8 +19,6 @@ class EmployeAdd extends Component {
             this.setState({
                 companies: res.data
             });
-        }).catch(err => {
-            this.props.changeAuth(false);
         });
     }
 
@@ -42,9 +40,7 @@ class EmployeAdd extends Component {
                     msgClass: "text-success"
                 });
             }
-        ).catch(err => {
-            this.props.changeAuth(false);
-        });
+        );
     }
 
     render() {

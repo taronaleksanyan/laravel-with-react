@@ -22,16 +22,12 @@ class EmployeEdit extends Component {
                     employe: res.data
                 });
             }
-        ).catch(err => {
-            this.props.changeAuth(false);
-        });
+        );
 
         sendRequest("/api/companies/").then(res => {
             this.setState({
                 companies: res.data
             });
-        }).catch(err => {
-            this.props.changeAuth(false);
         });
     }
 
@@ -54,12 +50,6 @@ class EmployeEdit extends Component {
                 this.setState({
                     msg: "Employe edited successfully",
                     msgClass: "text-success"
-                });
-            })
-            .catch(err => {
-                this.setState({
-                    msg: "fill all fields correctly",
-                    msgClass: "text-danger"
                 });
             });
     }

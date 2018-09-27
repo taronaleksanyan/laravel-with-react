@@ -30,14 +30,7 @@ export default class App extends Component {
         };
         this.changeAuth = this.changeAuth.bind(this);
     }
-    componentDidUpdate() {
-        // let token = localStorage.getItem('token');
-        //     sendRequest(`/me?token=${token}`).then(res => {
-        //         console.log(res);
-        //     }).catch(err => {
-        //         console.log(err);
-        //     });
-    }
+    
     changeAuth(auth) {
         if(!auth) localStorage.clear();
         this.setState({ isAuth: auth });

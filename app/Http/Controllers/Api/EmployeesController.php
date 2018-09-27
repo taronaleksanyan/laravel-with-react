@@ -30,13 +30,13 @@ class EmployeesController extends Controller
      */
     public function store(EmployeRequest $request, Employe $employe)
     {
-
         $employe->first_name = $request['first_name'];
         $employe->last_name = $request['last_name'];
         $employe->email = $request['email'];
         $employe->company = $request['company'];
         $employe->phone = $request['phone'];
         $employe->save();
+        return response()->json(['newEmploye' => $employe], 200);
     }
 
     /**
@@ -62,6 +62,7 @@ class EmployeesController extends Controller
         $employe = Employe::find($id);
         $employe->update($request->all());
         $employe->save();
+        return response()->json(null, 204);
     }
 
     /**
@@ -73,6 +74,6 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         Employe::destroy($id);
-        return $id;
+        return response()->json(null, 204);
     }
 }

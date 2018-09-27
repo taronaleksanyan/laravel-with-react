@@ -14,7 +14,7 @@ class CompaniesController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *i
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -32,13 +32,14 @@ class CompaniesController extends Controller
      * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyRequest $request, Company $company)
+    public function store(CompanyRequest $request,Company $company)
     {
         $company->name = $request['name'];
         $company->email = $request['email'];
         $company->website = $request['website'];
         $company->logo = $request['logo'];
         $company->save();
+        return response()->json(['newCompany'=>$company],200);
 
     }
 
@@ -48,9 +49,9 @@ class CompaniesController extends Controller
      * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
-        return $company;
+        return Company::find($id);
     }
 
     /**
@@ -60,29 +61,30 @@ class CompaniesController extends Controller
      * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function update(CompanyRequest $request, Company $company)
+    public function update(CompanyRequest $request, $id)
     {
-
+        $company = Company::find($id);
         $company->update($request->all());
 
         if ($company->logo !== $request['logo']) {
             Storage::delete($company->logo);
         }
         $company->save();
+        return response()->json(null, 204);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  App\Http\Requests\LogoRequest
+     * @param  int $id
      * @return App\Company
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
+        $company = Company::find($id);
         Storage::delete($company->logo);
         $company->delete();
-        return $company;
-
+        return response()->json(null, 204);
     }
     /**
      * Create logo image

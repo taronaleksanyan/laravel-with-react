@@ -15990,7 +15990,6 @@ __webpack_require__(65);
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
 window._ = __webpack_require__(43);
 window.Popper = __webpack_require__(21).default;
 
@@ -16001,9 +16000,9 @@ window.Popper = __webpack_require__(21).default;
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(22);
+    window.$ = window.jQuery = __webpack_require__(22);
 
-  __webpack_require__(45);
+    __webpack_require__(45);
 } catch (e) {}
 
 /**
@@ -16014,7 +16013,18 @@ try {
 
 window.axios = __webpack_require__(11);
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+window.axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (400 === error.response.status) {
+        localStorage.clear();
+        window.location.href = '/login';
+    } else {
+        return Promise.reject(error);
+    }
+});
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -16025,9 +16035,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
 } else {
-  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+    console.error("CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token");
 }
 
 /**
@@ -38283,16 +38293,6 @@ var App = function (_Component) {
     }
 
     _createClass(App, [{
-        key: "componentDidUpdate",
-        value: function componentDidUpdate() {
-            // let token = localStorage.getItem('token');
-            //     sendRequest(`/me?token=${token}`).then(res => {
-            //         console.log(res);
-            //     }).catch(err => {
-            //         console.log(err);
-            //     });
-        }
-    }, {
         key: "changeAuth",
         value: function changeAuth(auth) {
             if (!auth) localStorage.clear();
@@ -60905,8 +60905,6 @@ var Companies = function (_Component) {
                     companies: res.data.data,
                     last: res.data.last_page
                 });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -60918,14 +60916,12 @@ var Companies = function (_Component) {
             Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])(url, "delete").then(function (res) {
                 var companies = _this3.state.companies;
                 companies = companies.filter(function (company) {
-                    return company.id !== res.data.id;
+                    return company.id !== id;
                 });
 
                 _this3.setState({
                     companies: companies
                 });
-            }).catch(function (err) {
-                _this3.props.changeAuth(false);
             });
         }
     }, {
@@ -60939,8 +60935,6 @@ var Companies = function (_Component) {
                     companies: res.data.data,
                     page: page
                 });
-            }).catch(function (err) {
-                _this4.props.changeAuth(false);
             });
         }
     }, {
@@ -61146,14 +61140,7 @@ var CompanyAdd = function (_Component) {
                         msg: "Company created successfully",
                         msgClass: "text-success"
                     });
-                }).catch(function (err) {
-                    _this2.setState({
-                        msg: "Fill all fields correctly",
-                        msgClass: "text-danger"
-                    });
                 });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -61227,13 +61214,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var CompanyAdd = function (_Component) {
-    _inherits(CompanyAdd, _Component);
+var CompanyEdit = function (_Component) {
+    _inherits(CompanyEdit, _Component);
 
-    function CompanyAdd(props) {
-        _classCallCheck(this, CompanyAdd);
+    function CompanyEdit(props) {
+        _classCallCheck(this, CompanyEdit);
 
-        var _this = _possibleConstructorReturn(this, (CompanyAdd.__proto__ || Object.getPrototypeOf(CompanyAdd)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (CompanyEdit.__proto__ || Object.getPrototypeOf(CompanyEdit)).call(this, props));
 
         _this.inputFile = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createRef();
         _this.state = {
@@ -61247,7 +61234,7 @@ var CompanyAdd = function (_Component) {
         return _this;
     }
 
-    _createClass(CompanyAdd, [{
+    _createClass(CompanyEdit, [{
         key: "handleChange",
         value: function handleChange(e) {
             var newCompany = this.state.company;
@@ -61261,10 +61248,8 @@ var CompanyAdd = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/companies/" + this.props.match.params.id, this.props.changeAuth).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/companies/" + this.props.match.params.id).then(function (res) {
                 _this2.setState({ company: res.data });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -61285,27 +61270,17 @@ var CompanyAdd = function (_Component) {
                         msgClass: "text-success"
                     });
                     console.log("company created", res);
-                }).catch(function (err) {
-                    _this3.props.changeAuth(false);
                 });
 
                 return;
             }
-            Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/logo", "POST", formData, true, {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-                "Content-Type": "multipart/form-data"
-            }).then(function (response) {
+            Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/logo", "POST", formData).then(function (response) {
                 var result = _this3.state.company;
                 result["logo"] = response.data.path;
                 Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/companies/" + _this3.props.match.params.id, "PUT", result).then(function (res) {
                     _this3.setState({
                         msg: "Company edited successfully",
                         msgClass: "text-success"
-                    });
-                }).catch(function (err) {
-                    _this3.setState({
-                        msg: "Fill all fields correctly",
-                        msgClass: "text-danger"
                     });
                 });
             });
@@ -61359,10 +61334,10 @@ var CompanyAdd = function (_Component) {
         }
     }]);
 
-    return CompanyAdd;
+    return CompanyEdit;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
-/* harmony default export */ __webpack_exports__["a"] = (CompanyAdd);
+/* harmony default export */ __webpack_exports__["a"] = (CompanyEdit);
 
 /***/ }),
 /* 114 */
@@ -61419,9 +61394,6 @@ var Employees = function (_Component) {
                     employees: res.data.data,
                     last: res.data.last_page
                 });
-            }).catch(function (err) {
-                console.log('eee');
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -61433,13 +61405,11 @@ var Employees = function (_Component) {
             Object(__WEBPACK_IMPORTED_MODULE_4__dataService__["a" /* default */])(url, "DELETE").then(function (res) {
                 var arr = _this3.state.employees;
                 arr = arr.filter(function (value) {
-                    return value.id !== res.data;
+                    return value.id !== id;
                 });
                 _this3.setState({
                     employees: arr
                 });
-            }).catch(function (err) {
-                _this3.props.changeAuth(false);
             });
         }
     }, {
@@ -61454,8 +61424,6 @@ var Employees = function (_Component) {
                     last: res.data.last_page,
                     page: page
                 });
-            }).catch(function (err) {
-                _this4.props.changeAuth(false);
             });
             this.setState({
                 page: page
@@ -61646,8 +61614,6 @@ var EmployeAdd = function (_Component) {
                 _this2.setState({
                     companies: res.data
                 });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -61671,8 +61637,6 @@ var EmployeAdd = function (_Component) {
                     msg: "Employe Created successfully",
                     msgClass: "text-success"
                 });
-            }).catch(function (err) {
-                _this3.props.changeAuth(false);
             });
         }
     }, {
@@ -61791,16 +61755,12 @@ var EmployeEdit = function (_Component) {
                 _this2.setState({
                     employe: res.data
                 });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
 
             Object(__WEBPACK_IMPORTED_MODULE_1__dataService__["a" /* default */])("/api/companies/").then(function (res) {
                 _this2.setState({
                     companies: res.data
                 });
-            }).catch(function (err) {
-                _this2.props.changeAuth(false);
             });
         }
     }, {
@@ -61822,11 +61782,6 @@ var EmployeEdit = function (_Component) {
                 _this3.setState({
                     msg: "Employe edited successfully",
                     msgClass: "text-success"
-                });
-            }).catch(function (err) {
-                _this3.setState({
-                    msg: "fill all fields correctly",
-                    msgClass: "text-danger"
                 });
             });
         }

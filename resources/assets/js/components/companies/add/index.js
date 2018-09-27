@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import sendRequest from "../../dataService";
 
 class CompanyAdd extends Component {
-    
     constructor(props) {
         super(props);
         this.state = {
@@ -34,21 +33,12 @@ class CompanyAdd extends Component {
         }).then(response => {
             let result = this.state.newCompany;
             result["logo"] = response.data.path;
-            sendRequest("/api/companies", "POST", result)
-                .then(res => {
-                    this.setState({
-                        msg: "Company created successfully",
-                        msgClass: "text-success"
-                    });
-                })
-                .catch(err => {
-                    this.setState({
-                        msg: "Fill all fields correctly",
-                        msgClass: "text-danger"
-                    });
+            sendRequest("/api/companies", "POST", result).then(res => {
+                this.setState({
+                    msg: "Company created successfully",
+                    msgClass: "text-success"
                 });
-        }).catch(err => {
-            this.props.changeAuth(false);
+            });
         });
     }
 
