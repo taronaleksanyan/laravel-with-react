@@ -32,14 +32,14 @@ class CompaniesController extends Controller
      * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function store(CompanyRequest $request,Company $company)
+    public function store(CompanyRequest $request, Company $company)
     {
         $company->name = $request['name'];
         $company->email = $request['email'];
         $company->website = $request['website'];
         $company->logo = $request['logo'];
         $company->save();
-        return response()->json(['newCompany'=>$company],200);
+        return response()->json(['newCompany' => $company], 200);
 
     }
 

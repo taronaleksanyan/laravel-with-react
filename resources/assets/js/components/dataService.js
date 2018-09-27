@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 
 // import token from './getToken';
 
-
 export default function sendRequest(
     url,
     method = "get",
@@ -29,16 +28,4 @@ export default function sendRequest(
     }
 
     return axios(obj);
-}
-
-function handleSuccess(response) {
-    console.log("success");
-    return { data: response.data };
-}
-
-function handleError(error) {
-    if (error.response.status == 400) {
-        logout();
-    }
-    return Promise.reject(error);
 }

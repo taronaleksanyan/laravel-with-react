@@ -24,7 +24,7 @@ class LogoRequest extends FormRequest
     public function rules()
     {
         return [
-            'logo' =>  'dimensions:min_width=100,min_height=100'
+            'logo' => 'dimensions:min_width=100,min_height=100',
         ];
     }
 }
