@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-// import token from './getToken';
 
 export default function sendRequest(
     url,
